@@ -5,6 +5,10 @@ The shell header file is `shell/shell.h`.
 All minishell source files are located in the `shell/` directory excluding `main.c`.
 
 Functions to launch the shell are contained in `shell/shell.c`.
+
+Shell prompt interface is contained in `shell/shell_prompt.c`
+
+Shell cmd parser is contained in `shell/shell_parser.c`
 --- ---
 ## Interface
 - [ ] *Prompt*
@@ -32,12 +36,17 @@ Functions to launch the shell are contained in `shell/shell.c`.
 
 ## Backend
 - [ ] *Binary finder and launcher* 
+- [ ] *Promp parser*
 
 ## Miscellaneous
 Feel free to write something here.
 
 ## Bugs
 No bugs yet
+
+## Notes
+Parse redirect files, last one put into command is only to consider.
+
 --- ---
 > Allowed functions `readline, rl_clear_history, rl_on_new_line,
 rl_replace_line, rl_redisplay, add_history,

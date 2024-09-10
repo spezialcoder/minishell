@@ -1,23 +1,27 @@
 NAME = minishell
 CC = cc
 LIBFT_DIR = $(PWD)/lib/libft
-CFLAGS = -L($PWD)/lib/libft -lft -Wall -Wextra # -Werror
+CFLAGS = -g -I$(LIBFT_DIR) -L$(LIBFT_DIR) -lreadline -lncurses -lft -Wall -Wextra # -Werror
 SHELL_DIR = shell
-SRC = main.c $(wildcard $(SHELL_DIR)/shell_*.c)
+SRC = main.c $(wildcard $(SHELL_DIR)/shell*.c)
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME)
-
-$(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) -o $@ $(OBJ)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+all: $(NAME)
+
+
+$(NAME): $(OBJ) LIBFT
+	$(CC) $(OBJ) $(CFLAGS) -o $@
+
 LIBFT:
+	@echo "Compiling libft"
 	$(MAKE) -C $(LIBFT_DIR)
 
 clean:
+	$(MAKE) clean -C $(LIBFT_DIR)
 	rm -f $(OBJ)
 
 fclean: clean
