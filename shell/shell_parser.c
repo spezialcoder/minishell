@@ -7,24 +7,33 @@ static int is_valid_cmd_char(char c);
 int handle_prompt(char *prompt, t_shell sc) {
     int pipe_token_idx;
     char **pipe_tokens;
-    t_prompt prompt_data;
+    t_prompt *prompt_data;
+    t_prompt *current;
 
+    current = NULL;
     pipe_token_idx = 0;
     pipe_tokens = ft_split(prompt, '|');
     while(pipe_tokens[pipe_token_idx]) {
-        parse_prompt(pipe_tokens[pipe_token_idx++]);
+        if(current == NULL) {
+            prompt_data = parse_prompt(pipe_tokens[pipe_token_idx++]);
+            current = prompt_data;
+        } else {
+            current->pipe = parse_prompt(pipe_tokens[pipe_token_idx++]);
+            current = current->pipe;
+        }
     }
-
+    return 0;
 }
 
-t_prompt parse_prompt(char *prompt) {
+t_prompt* parse_prompt(char *prompt) {
     int idx;
-    t_prompt result;
+    t_prompt *result;
     char **tokenized;
 
+    result = (t_prompt*)ft_calloc(1,sizeof(t_prompt));
     idx = 0;
     tokenized = ft_split(prompt, ' ');
-    result.cmd = tokenized[0];
+    result->cmd = tokenized[0];
     while(tokenized[idx]) {
         printf("Tokens: %s ",tokenized[idx]);
         idx++;

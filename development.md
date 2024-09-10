@@ -44,6 +44,16 @@ Feel free to write something here.
 ## Bugs
 No bugs yet
 
+
+
+## Current
+### Parser
+- [x] pipe stacking
+- [x] command parsing
+- [ ] parameter parsing
+- [ ] redirect parsing
+- [ ] Quote parsing
+
 ## Notes
 Parse redirect files, last one put into command is only to consider.
 

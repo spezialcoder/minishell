@@ -32,7 +32,6 @@ int show_prompt(t_shell sc);
 
 //Parser
 typedef struct s_prompt {
-    char  *prompt;
     char  *cmd;
     char **parameter;
     uint8_t append_mode;
@@ -43,6 +42,6 @@ typedef struct s_prompt {
 } t_prompt;
 
 int handle_prompt(char *prompt, t_shell sc);
-t_prompt parse_prompt(char *prompt);
+t_prompt* parse_prompt(char *prompt);
 
 //Misc
