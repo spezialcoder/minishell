@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/17 16:36:23 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/17 17:53:48 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#define STASH_SIZE 4096
+
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
@@ -45,11 +47,11 @@ int show_prompt(t_shell sc);
 //Parser
 typedef struct s_prompt {
     char  *cmd;
-    char **parameter;
-    char  **redirect_delimit;
-    char  **redirect_input;
-    char  **redirect_output;
-    char  **redirect_delim;
+    t_list *parameter;
+    t_list *redirect_delimit;
+    t_list *redirect_input;
+    t_list *redirect_output;
+    t_list *redirect_append;
     struct s_prompt *pipe;
 } t_prompt;
 

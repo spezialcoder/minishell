@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 LIBFT_DIR = $(PWD)/lib/libft
 LIBS = -L$(LIBFT_DIR) -lreadline -lncurses -lft
-CFLAGS = -g -I$(LIBFT_DIR) -Wall -Wextra # -Werror
+CFLAGS = -g -O3 -I$(LIBFT_DIR) -Wall -Wextra # -Werror
 SHELL_DIR = shell
 SRC = main.c $(wildcard $(SHELL_DIR)/shell*.c)
 OBJ = $(SRC:.c=.o)
@@ -19,7 +19,7 @@ $(NAME): $(OBJ) LIBFT
 
 LIBFT:
 	@echo "Compiling libft"
-	$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) bonus -C $(LIBFT_DIR)
 
 clean:
 	$(MAKE) clean -C $(LIBFT_DIR)
