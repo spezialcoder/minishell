@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/17 18:08:01 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/17 18:10:45 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int handle_prompt(char *prompt, t_shell sc) {
     while(pipe_tokens[pipe_token_idx]) {
         if(current == NULL) {
             prompt_data = parse_prompt(pipe_tokens[pipe_token_idx++]);
+			//debug_print(prompt_data);
             current = prompt_data;
         } else {
             current->pipe = parse_prompt(pipe_tokens[pipe_token_idx++]);
@@ -84,6 +85,7 @@ t_prompt* parse_prompt(char *prompt) {
 		   !ft_memcmp(&prompt[idx],">>",2) ||
 		   prompt[idx] == '<' || prompt[idx] == '>') {
 			handle_redirect(prompt, &idx, result, char_stash);
+			stash_idx = 0;
 		}
 		else if(prompt[idx] == ' ') {
 			if(stash_idx > 0)
