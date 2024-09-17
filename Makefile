@@ -1,7 +1,8 @@
 NAME = minishell
 CC = cc
 LIBFT_DIR = $(PWD)/lib/libft
-CFLAGS = -g -I$(LIBFT_DIR) -L$(LIBFT_DIR) -lreadline -lncurses -lft -Wall -Wextra # -Werror
+LIBS = -L$(LIBFT_DIR) -lreadline -lncurses -lft
+CFLAGS = -g -I$(LIBFT_DIR) -Wall -Wextra # -Werror
 SHELL_DIR = shell
 SRC = main.c $(wildcard $(SHELL_DIR)/shell*.c)
 OBJ = $(SRC:.c=.o)
@@ -14,7 +15,7 @@ all: $(NAME)
 
 
 $(NAME): $(OBJ) LIBFT
-	$(CC) $(OBJ) $(CFLAGS) -o $@
+	$(CC) $(OBJ) $(CFLAGS) $(LIBS) -o $@
 
 LIBFT:
 	@echo "Compiling libft"

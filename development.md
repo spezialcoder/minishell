@@ -53,10 +53,84 @@ No bugs yet
 - [ ] parameter parsing
 - [ ] redirect parsing
 - [ ] Quote parsing
-
+- [ ] $ Expanding
 ## Notes
 Parse redirect files, last one put into command is only to consider.
 
+$(command) redirects output of command to bash or to command input
+
+$var expands var and redirects to bash or command input
+
+Pipe parsing -> redirection parsing -> var resolving
+
+Zsh (default terminal in 42) behaves differently than bash regarding redirections
+
+Redirection parsing example 
+```python
+def parse_r(prompt):
+         rrout = []
+         rout = []
+         rin = []
+         rrdel = []
+         for op in ['<<', '>>', '<', '>']:
+             tmp = prompt
+             while(tmp.find(op) != -1):
+                 tmp = tmp[tmp.find(op)+len(op):]
+                 tmp = tmp.lstrip(' ')
+                 idx = 0
+                 tmpstr=""
+                 while(idx < len(tmp) and tmp[idx] not in [' ','<','>','|']):
+                     tmpstr += tmp[idx]
+                     idx += 1
+                 if op == '<': rin.append(tmpstr)
+                 elif op == '>': rout.append(tmpstr)
+                 elif op == '<<': rrdel.append(tmpstr)
+                 elif op == '>>': rrout.append(tmpstr)
+             prompt = prompt.replace(op,'')
+         return (rrout, rout, rin, rrdel)
+```
+
+Parsing args and redirections (prob better approach)
+
+```python
+def parse_spec(prompt):
+          rrout = []
+          rout = []
+          rin = []
+          rrdel = []
+          param = []
+          tmp = prompt
+          idx = 0
+          tmpstr = ""
+          while(idx < len(tmp)):
+              if(tmp[idx:].find(">>") == 0 or tmp[idx:].find("<<") == 0
+              or tmp[idx] in ['<','>']):
+                  if(tmp[idx:].find(">>") == 0): op = ">>"
+                  elif(tmp[idx:].find("<<") == 0): op = "<<"
+                  else: op = tmp[idx]
+                  idx += len(op);
+                  while(tmp[idx] == ' '): idx += 1
+                  tmpstr = ""
+                  while(idx < len(tmp) and tmp[idx] not in [' ','<','>','|']):
+                      tmpstr += tmp[idx]
+                      idx += 1
+                  if op == '<': rin.append(tmpstr)
+                  elif op == '>': rout.append(tmpstr)
+                  elif op == '<<': rrdel.append(tmpstr)
+                  elif op == '>>': rrout.append(tmpstr)
+                  tmpstr=""
+                  continue
+              elif tmp[idx] == ' ':
+                  if(tmpstr != ''):
+                      param.append(tmpstr)
+                  tmpstr=""
+              else:
+                  tmpstr+=tmp[idx]
+              idx += 1
+          if(tmpstr != ''): param.append(tmpstr)
+          return (rrout, rout, rin, rrdel,param)
+
+```
 --- ---
 > Allowed functions `readline, rl_clear_history, rl_on_new_line,
 rl_replace_line, rl_redisplay, add_history,

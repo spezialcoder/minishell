@@ -1,7 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shell.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
+/*   Updated: 2024/09/17 16:36:23 by lsorg            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
 
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,6 +24,8 @@
 #include <termios.h>
 #include <termcap.h>
 #include "libft.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -34,10 +46,10 @@ int show_prompt(t_shell sc);
 typedef struct s_prompt {
     char  *cmd;
     char **parameter;
-    uint8_t append_mode;
-    char  *redirect_input;
-    char  *redirect_output;
-    char  *redirect_delim;
+    char  **redirect_delimit;
+    char  **redirect_input;
+    char  **redirect_output;
+    char  **redirect_delim;
     struct s_prompt *pipe;
 } t_prompt;
 
