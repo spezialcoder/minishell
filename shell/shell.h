@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/17 17:53:48 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/18 14:21:43 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int show_prompt(t_shell sc);
 //Parser
 typedef struct s_prompt {
     char  *cmd;
+	uint32_t argc;
     t_list *parameter;
     t_list *redirect_delimit;
     t_list *redirect_input;
@@ -54,6 +55,8 @@ typedef struct s_prompt {
     t_list *redirect_append;
     struct s_prompt *pipe;
 } t_prompt;
+
+
 
 int handle_prompt(char *prompt, t_shell sc);
 t_prompt* parse_prompt(char *prompt);
