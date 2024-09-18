@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/18 14:21:43 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/18 16:41:17 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 #include <readline/history.h>
 
 #define STASH_SIZE 4096
+#define VAR_BUFFER 4096
+#define ARG_MAX 16384
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -56,9 +58,9 @@ typedef struct s_prompt {
     struct s_prompt *pipe;
 } t_prompt;
 
-
-
+uint8_t handle_quote(char *prompt, uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx);
 int handle_prompt(char *prompt, t_shell sc);
 t_prompt* parse_prompt(char *prompt);
+char* handle_string(char *str, uint32_t ssize);
 
 //Misc

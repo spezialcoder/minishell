@@ -12,14 +12,14 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 --- ---
 ## Interface
 - [ ] *Prompt*
-- [ ] *Single quote*
-- [ ] *Double quote*
-- [ ] *Pipelining commands*
+- [x] *Single quote*
+- [x] *Double quote*
+- [x] *Pipelining commands*
 - [ ] *Environment variables*
 - [ ] *$? last exit status*
 - [ ] *Handle control signals (ctrl)*
-- [ ] *Handle redirections*
-- [ ] *Ignore \ or ;*
+- [x] *Handle redirections*
+- [x] *Ignore \ or ;*
 
 > Interface related functions are found in `shell_interface_{module number}.c` files.
 
@@ -36,7 +36,7 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 
 ## Backend
 - [ ] *Binary finder and launcher* 
-- [ ] *Promp parser*
+- [ ] *Prompt parser*
 
 ## Miscellaneous
 Feel free to write something here.
@@ -50,9 +50,9 @@ No bugs yet
 ### Parser
 - [x] pipe stacking
 - [x] command parsing
-- [ ] parameter parsing
-- [ ] redirect parsing
-- [ ] Quote parsing
+- [x] parameter parsing
+- [x] redirect parsing
+- [x] Quote parsing
 - [ ] $ Expanding
 ## Notes
 Parse redirect files, last one put into command is only to consider.

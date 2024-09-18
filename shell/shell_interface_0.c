@@ -6,12 +6,8 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/17 14:45:17 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/18 15:21:31 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void resolve_var(char *str) {
-
-}
