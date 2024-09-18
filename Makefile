@@ -2,7 +2,7 @@ NAME = minishell
 CC = cc
 LIBFT_DIR = $(PWD)/lib/libft
 LIBS = -L$(LIBFT_DIR) -lreadline -lncurses -lft
-CFLAGS = -g -I$(LIBFT_DIR) -Wall -Wextra # -Werror -O3
+CFLAGS = -g -I$(LIBFT_DIR) -Wall -Wextra -O3 # -Werror
 SHELL_DIR = shell
 SRC = main.c $(wildcard $(SHELL_DIR)/shell*.c)
 OBJ = $(SRC:.c=.o)

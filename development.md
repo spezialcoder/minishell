@@ -42,8 +42,7 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 Feel free to write something here.
 
 ## Bugs
-No bugs yet
-
+Nothing yet
 
 
 ## Current

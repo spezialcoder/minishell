@@ -6,16 +6,13 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/18 16:11:54 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/18 17:29:07 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt);
-static void parse_command(t_prompt *data, char *prompt);
-static int is_valid_cmd_char(char c);
-static void lst_append(char *str, t_list **lst, uint32_t ssize);
 static void handle_redirect(char *prompt, uint64_t *idx, t_prompt *data, char *char_stash);
 
 static void debug_print(t_prompt *prompt_data) {
@@ -55,6 +52,7 @@ int handle_prompt(char *prompt, t_shell sc) {
 
 	prompt_data = parse_prompt(prompt);
 	debug_print(prompt_data);
+	free(prompt_data);
     return 0;
 }
 
