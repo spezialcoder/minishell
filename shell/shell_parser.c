@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/18 17:29:07 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/19 15:37:20 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_prompt* parse_prompt(char *prompt) {
 	uint32_t stash_idx;
 	uint8_t quote_mode;
 
+	prompt = handle_string(prompt, ft_strlen(prompt));
     result = (t_prompt*)ft_calloc(1,sizeof(t_prompt));
 	result->argc = 0;
 	char_stash = (char*)malloc(sizeof(char)*STASH_SIZE);
@@ -97,14 +98,16 @@ static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt) {
 	char *result;
 
 	if(prompt->argc == 0 && *stash_idx > 0) {
-		result = handle_string(char_stash, *stash_idx);
+		result = (char*)ft_calloc(1,*stash_idx+1);
+		ft_memcpy(result, char_stash, *stash_idx);
 		prompt->cmd = result;
 		*stash_idx = 0;
 		prompt->argc++;
 		return;
 	}
 	if(*stash_idx > 0) {
-		result = handle_string(char_stash, *stash_idx);
+		result = (char*)ft_calloc(1,*stash_idx+1);
+		ft_memcpy(result, char_stash, *stash_idx);
 		ft_lstadd_back(&prompt->parameter, ft_lstnew((void*)result));
 		*stash_idx = 0;
 		prompt->argc++;
@@ -137,6 +140,7 @@ static void handle_redirect(char *prompt, uint64_t *idx, t_prompt *data, char *c
 		}
 		char_stash[stash_idx++] = prompt[(*idx)++];
 	}
-	result = handle_string(char_stash, stash_idx);
+	result = (char*)ft_calloc(1,stash_idx+1);
+	ft_memcpy(result, char_stash, stash_idx);
 	ft_lstadd_back(output, ft_lstnew((void*)result));
 }

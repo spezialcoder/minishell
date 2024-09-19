@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:59:35 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/18 18:13:13 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/19 15:42:13 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,9 @@ char* handle_string(char *str, uint32_t ssize) {
 	while(idx < ssize) {
 		if(str[idx] == '\"') {
 			quote_mode ^= 1;
-			if(!(quote_mode & 2)) {
-				idx++;
-				continue;
-			}
 		}
 		else if(str[idx] == '\'' && !(quote_mode&1)) {
 			quote_mode ^= 2;
-			if(!(quote_mode & 1)) {
-				idx++;
-				continue;
-			}
 		}
 		if(str[idx] == '$' && !(quote_mode&2)) {
 			while(is_valid_var_char(str[++idx]) && idx < ssize)
@@ -58,7 +50,7 @@ char* handle_string(char *str, uint32_t ssize) {
 	return (free(sp.env_var), free(sp.arg_buffer), sp.result);
 }
 
-uint8_t handle_quote(const char *prompt, const uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx) {
+uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx) {
 	if(prompt[*idx] == '\"') {
 		if(!(*quote_mode&2) && (*quote_mode&1) &&
 		   *stash_idx == 0) {
@@ -66,6 +58,10 @@ uint8_t handle_quote(const char *prompt, const uint64_t *idx, uint8_t *quote_mod
 			(*stash_idx)++;
 		}
 		*quote_mode ^= 1;
+		if(!(*quote_mode & 2)) {
+			(*idx)++;
+			return(1);
+		}
 	} else if(prompt[*idx] == '\'') {
 		if((*quote_mode&2) && !(*quote_mode&1) &&
 		   *stash_idx == 0) {
@@ -73,6 +69,10 @@ uint8_t handle_quote(const char *prompt, const uint64_t *idx, uint8_t *quote_mod
 			(*stash_idx)++;
 		}
 		*quote_mode ^= 2;
+		if(!(*quote_mode & 1)) {
+			(*idx)++;
+			return (1);
+		}
 	}
 	return (0);
 }

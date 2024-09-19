@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/18 17:28:49 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/19 15:41:53 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ struct s_string_parser {
 	t_size_t tmp_var_len;
 };
 
-uint8_t handle_quote(const char *prompt, const uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx);
+uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx);
 int handle_prompt(char *prompt, t_shell sc);
 t_prompt* parse_prompt(char *prompt);
 char* handle_string(char *str, uint32_t ssize);

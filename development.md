@@ -11,7 +11,7 @@ Shell prompt interface is contained in `shell/shell_prompt.c`
 Shell cmd parser is contained in `shell/shell_parser.c`
 --- ---
 ## Interface
-- [ ] *Prompt*
+- [x] *Prompt*
 - [x] *Single quote*
 - [x] *Double quote*
 - [x] *Pipelining commands*
@@ -36,13 +36,13 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 
 ## Backend
 - [ ] *Binary finder and launcher* 
-- [ ] *Prompt parser*
+- [x] *Prompt parser*
 
 ## Miscellaneous
 Feel free to write something here.
 
 ## Bugs
-Nothing yet
+check var not starting with number
 
 
 ## Current
@@ -52,15 +52,13 @@ Nothing yet
 - [x] parameter parsing
 - [x] redirect parsing
 - [x] Quote parsing
-- [ ] $ Expanding
+- [x] $ Expanding
 ## Notes
 Parse redirect files, last one put into command is only to consider.
 
 $(command) redirects output of command to bash or to command input
 
 $var expands var and redirects to bash or command input
-
-Pipe parsing -> redirection parsing -> var resolving
 
 Zsh (default terminal in 42) behaves differently than bash regarding redirections
 
