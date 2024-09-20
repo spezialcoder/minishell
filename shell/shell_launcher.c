@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:40:37 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/20 15:41:27 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/20 16:18:05 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static char* find_binary(char *cmd);
 static char* concat_path_file(char *path, char *file);
+static void cmd_processor(char *cmd, int fd_in, int fd_out, char **argv, char **envp);
 
 int launch_command(t_prompt *prompt, t_shell *sc) {
 	t_prompt *current;
@@ -21,6 +22,12 @@ int launch_command(t_prompt *prompt, t_shell *sc) {
 	current = prompt;
 	printf("Binary: %s\n", find_binary(current->cmd));
 	return 0;
+}
+
+static void cmd_processor(char *cmd, int fd_in, int fd_out, char **argv, char **envp) {
+	dup2(fd_in, 1);
+	dup2(fd_out, 0);
+	execve(cmd, argv, envp);
 }
 
 static char* find_binary(char *cmd) {

@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/20 15:29:24 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/20 16:06:57 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,12 @@ typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 
 typedef struct s_shell {
+	char **envp;
     int recent_exit_code; // Most recent exit code for $?
 } t_shell;
 
 //Minishell main
-int minishell_boot();
+int minishell_boot(char **envp);
 
 //Prompt
 int show_prompt(t_shell *sc);
