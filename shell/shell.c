@@ -6,12 +6,13 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/18 15:52:28 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/20 15:11:02 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 int minishell_boot() {
-    show_prompt((t_shell){});
+	t_shell sc;
+    show_prompt(&sc);
 }

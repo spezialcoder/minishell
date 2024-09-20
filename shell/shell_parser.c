@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/19 15:37:20 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/20 15:01:14 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,47 +14,6 @@
 
 static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt);
 static void handle_redirect(char *prompt, uint64_t *idx, t_prompt *data, char *char_stash);
-
-static void debug_print(t_prompt *prompt_data) {
-	t_list *tmp;
-	tmp = prompt_data->parameter;
-	printf("Prompt: %s\n",prompt_data->cmd);
-	printf("Argc: %d\n",prompt_data->argc);
-	for(int i = 0; i < ft_lstsize(prompt_data->parameter); i++) {
-		printf("Parameter %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_input;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_input); i++) {
-		printf("Redirect Input %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_output;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_output); i++) {
-		printf("Redirect Output %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_append;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_append); i++) {
-		printf("Redirect Append %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_delimit;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_delimit); i++) {
-		printf("Redirect Delim %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	if(prompt_data->pipe) debug_print(prompt_data->pipe);
-}
-
-int handle_prompt(char *prompt, t_shell sc) {
-	t_prompt *prompt_data;
-
-	prompt_data = parse_prompt(prompt);
-	debug_print(prompt_data);
-	free(prompt_data);
-    return 0;
-}
 
 t_prompt* parse_prompt(char *prompt) {
     uint64_t idx;
