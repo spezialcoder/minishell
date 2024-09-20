@@ -14,11 +14,12 @@
 
 static int is_valid_var_char(char c);
 
-char* handle_string(char *str, uint32_t ssize) {
+char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
 	uint32_t idx;
 	uint32_t out_idx;
 	uint8_t quote_mode;
 	struct s_string_parser sp;
+    char *var_content;
 
 	sp.env_var = (char*)malloc(sizeof(char)*VAR_BUFFER);
 	sp.arg_buffer = (char*)malloc(sizeof(char)*ARG_MAX);
@@ -34,14 +35,24 @@ char* handle_string(char *str, uint32_t ssize) {
 			quote_mode ^= 2;
 		}
 		if(str[idx] == '$' && !(quote_mode&2)) {
-			while(is_valid_var_char(str[++idx]) && idx < ssize)
-				sp.env_var[sp.stash_idx++] = str[idx];
-			sp.env_var[sp.stash_idx] = 0;
-			if(getenv(sp.env_var)) {
-				sp.tmp_var_len = ft_strlen(getenv(sp.env_var));
-				ft_memcpy(&sp.arg_buffer[out_idx], getenv(sp.env_var),sp.tmp_var_len);
+            if(str[idx+1] == '?') {
+                var_content = ft_itoa(sc->recent_exit_code);
+                idx++;
+            } else {
+                while(is_valid_var_char(str[++idx]) && idx < ssize)
+                    sp.env_var[sp.stash_idx++] = str[idx];
+                sp.env_var[sp.stash_idx] = 0;
+                var_content = getenv(sp.env_var);
+            }
+			if(var_content) {
+				sp.tmp_var_len = ft_strlen(var_content);
+				ft_memcpy(&sp.arg_buffer[out_idx], var_content,sp.tmp_var_len);
 				out_idx += sp.tmp_var_len;
 			}
+            if(str[idx] == '?') {
+                free(var_content);
+                idx++;
+            }
 			sp.stash_idx = 0;
 		} else
 			sp.arg_buffer[out_idx++] = str[idx++];

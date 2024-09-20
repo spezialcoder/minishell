@@ -18,9 +18,22 @@ static void cmd_processor(char *cmd, int fd_in, int fd_out, char **argv, char **
 
 int launch_command(t_prompt *prompt, t_shell *sc) {
 	t_prompt *current;
+    pid_t cpid;
+    char **argv;
+    int childs = 0;
 
 	current = prompt;
-	printf("Binary: %s\n", find_binary(current->cmd));
+    while(current) {
+        argv = list_to_array(current->parameter);
+        childs++;
+        cpid = fork();
+        if(cpid == 0) {
+            cmd_processor(find_binary(current->cmd), 1, 0, argv, sc->envp);
+        }
+        free_split_array(argv);
+        current = current->pipe;
+    }
+    while(childs--) wait(NULL);
 	return 0;
 }
 

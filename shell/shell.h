@@ -68,11 +68,12 @@ struct s_string_parser {
 };
 
 uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx);
-t_prompt* parse_prompt(char *prompt);
-char* handle_string(char *str, uint32_t ssize);
+t_prompt* parse_prompt(char *prompt, t_shell *sc);
+char* handle_string(char *str, uint32_t ssize, t_shell *sc);
 void free_prompt(t_prompt *prompt);
 int launch_command(t_prompt *prompt, t_shell *sc);
 int handle_prompt(char *prompt, t_shell *sc);
 
 //Misc
 void free_split_array(char **arr);
+char	**list_to_array(t_list *lst);

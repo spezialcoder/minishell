@@ -15,14 +15,14 @@
 static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt);
 static void handle_redirect(char *prompt, uint64_t *idx, t_prompt *data, char *char_stash);
 
-t_prompt* parse_prompt(char *prompt) {
+t_prompt* parse_prompt(char *prompt, t_shell *sc) {
     uint64_t idx;
     t_prompt *result;
 	char *char_stash;
 	uint32_t stash_idx;
 	uint8_t quote_mode;
 
-	prompt = handle_string(prompt, ft_strlen(prompt));
+	prompt = handle_string(prompt, ft_strlen(prompt), sc);
     result = (t_prompt*)ft_calloc(1,sizeof(t_prompt));
 	result->argc = 0;
 	char_stash = (char*)malloc(sizeof(char)*STASH_SIZE);
@@ -41,7 +41,7 @@ t_prompt* parse_prompt(char *prompt) {
 		else if(prompt[idx] == ' ' && !quote_mode) {
 			stash_it(&stash_idx, char_stash, result);
 		} else if(prompt[idx] == '|' && !quote_mode) {
-			result->pipe = parse_prompt(prompt+idx+1);
+			result->pipe = parse_prompt(prompt+idx+1, sc);
 			break;
 		} else {
 				char_stash[stash_idx++] = prompt[idx];
@@ -60,9 +60,6 @@ static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt) {
 		result = (char*)ft_calloc(1,*stash_idx+1);
 		ft_memcpy(result, char_stash, *stash_idx);
 		prompt->cmd = result;
-		*stash_idx = 0;
-		prompt->argc++;
-		return;
 	}
 	if(*stash_idx > 0) {
 		result = (char*)ft_calloc(1,*stash_idx+1);
