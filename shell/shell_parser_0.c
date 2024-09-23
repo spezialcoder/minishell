@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:59:35 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/20 14:35:23 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 17:49:25 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@ char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
                 var_content = ft_itoa(sc->recent_exit_code);
                 idx++;
             } else {
-                while(is_valid_var_char(str[++idx]) && idx < ssize)
-                    sp.env_var[sp.stash_idx++] = str[idx];
+                while(is_valid_var_char(str[++idx]) && idx < ssize) {
+					if(str[idx] >= '0' && str[idx] <= '9') {
+						idx++;
+						break;
+					}
+					sp.env_var[sp.stash_idx++] = str[idx];
+				}
                 sp.env_var[sp.stash_idx] = 0;
                 var_content = getenv(sp.env_var);
             }
@@ -71,6 +76,11 @@ uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, cha
 		*quote_mode ^= 1;
 		if(!(*quote_mode & 2)) {
 			(*idx)++;
+			if(prompt[*idx] == '\"') {
+				*stash_idx = 0;
+				return (handle_quote(prompt,idx,quote_mode,char_stash,stash_idx));
+			}
+
 			return(1);
 		}
 	} else if(prompt[*idx] == '\'') {
@@ -82,6 +92,10 @@ uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, cha
 		*quote_mode ^= 2;
 		if(!(*quote_mode & 1)) {
 			(*idx)++;
+			if(prompt[*idx] == '\'') {
+				*stash_idx = 0;
+				return (handle_quote(prompt,idx,quote_mode,char_stash,stash_idx));
+			}
 			return (1);
 		}
 	}

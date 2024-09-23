@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/20 15:01:11 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 17:13:44 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 static void debug_print(t_prompt *prompt_data) {
 	t_list *tmp;
 	tmp = prompt_data->parameter;
-	printf("Prompt: %s\n",prompt_data->cmd);
+	printf("CMD: %s\n",prompt_data->cmd);
 	printf("Argc: %d\n",prompt_data->argc);
 	for(int i = 0; i < ft_lstsize(prompt_data->parameter); i++) {
-		printf("Parameter %s\n", (char*)tmp->content);
+		printf("ARGV %s\n", (char*)tmp->content);
 		tmp = tmp->next;
 	}
 	tmp = prompt_data->redirect_input;
@@ -50,7 +50,8 @@ int show_prompt(t_shell *sc) {
     prompt = "";
     while(prompt) {
         prompt = readline("minishell> ");
-        add_history(prompt);
+        if(*prompt)
+			add_history(prompt);
         handle_prompt(prompt,sc);
     }
     free(prompt);
@@ -62,7 +63,8 @@ int handle_prompt(char *prompt, t_shell *sc) {
 	t_prompt *prompt_data;
 
 	prompt_data = parse_prompt(prompt, sc);
-	launch_command(prompt_data, sc);
+	//launch_command(prompt_data, sc);
+	debug_print(prompt_data);
     free_prompt(prompt_data);
 	return 0;
 }
