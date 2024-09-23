@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 19:05:03 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:31:14 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,24 @@ int minishell_boot(char **envp);
 int show_prompt(t_shell *sc);
 
 //Parser
+
+typedef enum e_redirect_type {
+	R_FILE_INPUT=0,
+	R_FILE_OUTPUT=1,
+	R_FILE_APPEND=2,
+	R_DELIMITER=3
+} t_redirect_type;
+
+typedef struct s_redirect {
+	enum e_redirect_type type;
+	char *prompt;
+} t_redirect;
+
 typedef struct s_prompt {
     char  *cmd;
 	uint32_t argc;
     t_list *parameter;
-    t_list *redirect_delimit;
-    t_list *redirect_input;
-    t_list *redirect_output;
-    t_list *redirect_append;
+    t_list *redirect;
     struct s_prompt *pipe;
 } t_prompt;
 
@@ -72,6 +82,7 @@ t_prompt* parse_prompt(char *prompt, t_shell *sc);
 char* handle_string(char *str, uint32_t ssize, t_shell *sc);
 void free_prompt(t_prompt *prompt);
 int handle_prompt(char *prompt, t_shell *sc);
+void free_t_redirect(void *addr);
 
 //Launcher
 

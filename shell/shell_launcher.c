@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:40:37 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 19:11:20 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:35:39 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,17 @@ int launch_command(t_prompt *prompt, t_shell *sc, t_process_io io) {
 }
 
 static void resolve_process_io(t_prompt *prompt, t_process_io *io) {
+	uint8_t redirect_status;
+	t_redirect *redirect;
+	t_list *current;
 
+	redirect_status = 0;
+	current = prompt->redirect;
+	while(current) {
+		redirect = (t_redirect*)current->content;
+		redirect_status |= (1<<redirect->type);
+		current = current->next;
+	}
 }
 
 static void cmd_processor(t_process ps) {

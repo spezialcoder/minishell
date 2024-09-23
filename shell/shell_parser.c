@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 18:14:41 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:21:58 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,20 +70,20 @@ static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt) {
 }
 
 static void handle_redirect(char *prompt, uint64_t *idx, t_prompt *data, char *char_stash) {
-	t_list **output;
 	uint32_t stash_idx;
-	char *result;
+	t_redirect *new_redirect;
 
+	new_redirect = ft_calloc(1,sizeof(t_redirect));
 	if(!ft_memcmp(&prompt[*idx],"<<", 2)) {
-		output = &data->redirect_delimit;
+		new_redirect->type = R_DELIMITER;
 		(*idx)++;
 	} else if(!ft_memcmp(&prompt[*idx], ">>", 2)) {
-		output = &data->redirect_append;
+		new_redirect->type = R_FILE_APPEND;
 		(*idx)++;
 	} else if(prompt[*idx] == '<') {
-		output = &data->redirect_input;
+		new_redirect->type = R_FILE_INPUT;
 	} else
-		output = &data->redirect_output;
+		new_redirect->type = R_FILE_OUTPUT;
 	(*idx)++;
 	while(prompt[*idx] == ' ') (*idx)++;
 	stash_idx = 0;
@@ -95,7 +95,7 @@ static void handle_redirect(char *prompt, uint64_t *idx, t_prompt *data, char *c
 		}
 		char_stash[stash_idx++] = prompt[(*idx)++];
 	}
-	result = (char*)ft_calloc(1,stash_idx+1);
-	ft_memcpy(result, char_stash, stash_idx);
-	ft_lstadd_back(output, ft_lstnew((void*)result));
+	new_redirect->prompt = (char*)ft_calloc(1,stash_idx+1);
+	ft_memcpy(new_redirect->prompt, char_stash, stash_idx);
+	ft_lstadd_back(&data->redirect, ft_lstnew((void*)new_redirect));
 }

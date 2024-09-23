@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 17:59:16 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:27:36 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,26 @@ static void debug_print(t_prompt *prompt_data) {
 		printf("ARGV %s\n", (char*)tmp->content);
 		tmp = tmp->next;
 	}
-	tmp = prompt_data->redirect_input;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_input); i++) {
-		printf("Redirect Input %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_output;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_output); i++) {
-		printf("Redirect Output %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_append;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_append); i++) {
-		printf("Redirect Append %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect_delimit;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect_delimit); i++) {
-		printf("Redirect Delim %s\n", (char*)tmp->content);
+	tmp = prompt_data->redirect;
+	for(int i = 0; i < ft_lstsize(prompt_data->redirect); i++) {
+		switch(((t_redirect*)tmp->content)->type) {
+			case R_FILE_INPUT:
+				printf("Redirect Input ");
+				break;
+			case R_FILE_OUTPUT:
+				printf("Redirect Output ");
+				break;
+			case R_FILE_APPEND:
+				printf("Redirect Append ");
+				break;
+			case R_DELIMITER:
+				printf("Redirect Delimit ");
+				break;
+			default:
+				printf("Invalid Redirect: ");
+				break;
+		}
+		printf("%s\n", ((t_redirect *)tmp->content)->prompt);
 		tmp = tmp->next;
 	}
 	if(prompt_data->pipe) debug_print(prompt_data->pipe);

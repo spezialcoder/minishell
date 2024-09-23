@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/20 15:29:14 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:30:13 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,12 @@ char	**list_to_array(t_list *lst)
         current = current->next;
     }
     return (array);
+}
+
+void free_t_redirect(void *addr) {
+	t_redirect *redirect;
+
+	redirect = (t_redirect*)addr;
+	free(redirect->prompt);
+	free(redirect);
 }

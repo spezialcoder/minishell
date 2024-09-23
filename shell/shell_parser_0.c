@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:59:35 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 17:49:25 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:31:14 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,7 @@ void free_prompt(t_prompt *prompt) {
 	while(current) {
 		free(current->cmd);
 		ft_lstclear(&current->parameter,free);
-		ft_lstclear(&current->redirect_input,free);
-		ft_lstclear(&current->redirect_output,free);
-		ft_lstclear(&current->redirect_append,free);
-		ft_lstclear(&current->redirect_delimit,free);
+		ft_lstclear(&current->redirect,free_t_redirect);
 		current = current->pipe;
 		free(tmp);
 		tmp = current;
