@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/20 15:01:14 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 18:14:41 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ t_prompt* parse_prompt(char *prompt, t_shell *sc) {
 		idx++;
 	}
 	stash_it(&stash_idx, char_stash, result);
-	free(char_stash);
-    return (result);
+    return (free(char_stash), free(prompt), result);
 }
 
 static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt) {

@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 17:36:48 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:05:03 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,24 @@ uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, cha
 t_prompt* parse_prompt(char *prompt, t_shell *sc);
 char* handle_string(char *str, uint32_t ssize, t_shell *sc);
 void free_prompt(t_prompt *prompt);
-int launch_command(t_prompt *prompt, t_shell *sc);
 int handle_prompt(char *prompt, t_shell *sc);
+
+//Launcher
+
+typedef struct s_process_io {
+	int sin;
+	int sout;
+} t_process_io;
+
+typedef struct s_process {
+	pid_t process_id;
+	t_process_io io;
+	char *cmd;
+	char **argv;
+	char **envp;
+} t_process;
+
+int launch_command(t_prompt *prompt, t_shell *sc, t_process_io);
 
 //Misc
 void free_split_array(char **arr);

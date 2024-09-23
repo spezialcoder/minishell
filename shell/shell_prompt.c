@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 17:13:44 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 17:59:16 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int show_prompt(t_shell *sc) {
         if(*prompt)
 			add_history(prompt);
         handle_prompt(prompt,sc);
+		free(prompt);
     }
-    free(prompt);
     rl_clear_history();
     return 0;
 }

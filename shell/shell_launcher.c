@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:40:37 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 17:10:39 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/23 19:11:20 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 static char* find_binary(char *cmd);
 static char* concat_path_file(char *path, char *file);
-static void cmd_processor(char *cmd, int fd_in, int fd_out, char **argv, char **envp);
+static void resolve_process_io(t_prompt *prompt, t_process_io *io);
+static void cmd_processor(t_process ps);
 
-int launch_command(t_prompt *prompt, t_shell *sc) {
-	t_prompt *current;
+/*
+ * t_prompt *current;
     pid_t cpid;
     char **argv;
     int childs = 0;
@@ -34,13 +35,22 @@ int launch_command(t_prompt *prompt, t_shell *sc) {
         current = current->pipe;
     }
     while(childs--) wait(NULL);
+ */
+
+int launch_command(t_prompt *prompt, t_shell *sc, t_process_io io) {
+	resolve_process_io(prompt, &io);
+
 	return 0;
 }
 
-static void cmd_processor(char *cmd, int fd_in, int fd_out, char **argv, char **envp) {
-	dup2(fd_in, 1);
-	dup2(fd_out, 0);
-	execve(cmd, argv, envp);
+static void resolve_process_io(t_prompt *prompt, t_process_io *io) {
+
+}
+
+static void cmd_processor(t_process ps) {
+	dup2(ps.io.sin, 1);
+	dup2(ps.io.sout, 0);
+	execve(ps.cmd, ps.argv, ps.envp);
 }
 
 static char* find_binary(char *cmd) {
@@ -52,7 +62,7 @@ static char* find_binary(char *cmd) {
 	if(!cmd) return (NULL);
 	path_str = getenv("PATH");
 	if(access(cmd, F_OK | X_OK) == 0)
-		return (ft_memcpy(ft_calloc(1, ft_strlen(cmd)+0), cmd, ft_strlen(cmd)));
+		return (ft_memcpy(ft_calloc(1, ft_strlen(cmd)+1), cmd, ft_strlen(cmd)));
 	if(!path_str)
 		path_str = "";
 	path = ft_split(path_str,':');
