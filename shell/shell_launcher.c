@@ -14,7 +14,7 @@
 
 static char* find_binary(char *cmd);
 static char* concat_path_file(char *path, char *file);
-static void resolve_process_io(const t_prompt *prompt, t_process_io *io);
+static t_error resolve_process_io(const t_prompt *prompt, t_process_io *io);
 static void cmd_processor(t_process *ps);
 
 t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io) {
@@ -22,6 +22,7 @@ t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io) {
     t_process_io pipe_io;
     int pipefd[2];
     int status;
+    t_error error;
 
     status = 0;
     command = (t_process*)ft_calloc(1,sizeof(t_process));
@@ -37,7 +38,8 @@ t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io) {
         pipe_io.sin = pipefd[0];
         pipe_io.sout = 1;
     }
-    resolve_process_io(prompt, &command->io);
+    error = resolve_process_io(prompt, &command->io);
+    if(error != E_OK) return (error);
     command->process_id = fork();
     ft_lstadd_back(&sc->processes, ft_lstnew((void*)command));
     if(command->process_id == 0) {
@@ -63,7 +65,7 @@ static void cmd_processor(t_process *ps) {
     execve(ps->cmd, ps->argv, ps->envp);
 }
 
-static void resolve_process_io(const t_prompt *prompt, t_process_io *io) {
+static t_error resolve_process_io(const t_prompt *prompt, t_process_io *io) {
 	uint8_t redirect_status;
 	t_redirect *redirect;
 	t_list *current;
@@ -75,15 +77,19 @@ static void resolve_process_io(const t_prompt *prompt, t_process_io *io) {
         if(redirect->type == R_FILE_OUTPUT ||
                 redirect->type == R_FILE_APPEND) {
             if(redirect_status&1) close(io->sout);
-            io->sout = obtain_redirect_descriptor((t_redirect*)current->content);
+            io->sout = obtain_redirect_descriptor(redirect);
             if(!(redirect_status&1)) redirect_status |= 1;
         } else {
             if(redirect_status&2) close(io->sin);
-            io->sin = obtain_redirect_descriptor((t_redirect*)current->content);
+            io->sin = obtain_redirect_descriptor(redirect);
+            if(io->sin == -1) {
+                return (E_REDIRECT_FILE_NOT_FOUND);
+            }
             if(!(redirect_status&2)) redirect_status |= (1<<1);
         }
 		current = current->next;
 	}
+    return (E_OK);
 }
 
 static char* find_binary(char *cmd) {

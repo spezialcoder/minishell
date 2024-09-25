@@ -77,5 +77,7 @@ int handle_prompt(char *prompt, t_shell *sc) {
 void handle_error(t_error error) {
     if(error == E_CMD_NOT_FOUND) {
         printf("ERROR: command not found.\n");
+    } else if(error == E_REDIRECT_FILE_NOT_FOUND) {
+        printf("ERROR: file not found.\n");
     }
 }

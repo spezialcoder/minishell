@@ -48,7 +48,8 @@ int minishell_boot(char **envp);
 //Prompt
 typedef enum e_error {
     E_CMD_NOT_FOUND=0,
-    E_OK=1
+    E_OK=1,
+    E_REDIRECT_FILE_NOT_FOUND=2
 } t_error;
 
 int show_prompt(t_shell *sc);
