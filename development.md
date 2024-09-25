@@ -16,7 +16,7 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 - [x] *Double quote*
 - [x] *Pipelining commands*
 - [ ] *Environment variables*
-- [ ] *$? last exit status*
+- [x] *$? last exit status*
 - [ ] *Handle control signals (ctrl)*
 - [x] *Handle redirections*
 - [x] *Ignore \ or ;*
@@ -35,7 +35,7 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 > Builtins are found in `shell_builtins_{modules_number}.c` files.
 
 ## Backend
-- [ ] *Binary finder and launcher* 
+- [x] *Binary finder and launcher* 
 - [x] *Prompt parser*
 
 ## Miscellaneous

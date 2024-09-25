@@ -15,32 +15,50 @@
 static char* find_binary(char *cmd);
 static char* concat_path_file(char *path, char *file);
 static void resolve_process_io(t_prompt *prompt, t_process_io *io);
-static void cmd_processor(t_process ps);
-
-/*
- * t_prompt *current;
-    pid_t cpid;
-    char **argv;
-    int childs = 0;
-
-	current = prompt;
-    while(current) {
-        argv = list_to_array(current->parameter);
-        childs++;
-        cpid = fork();
-        if(cpid == 0) {
-            cmd_processor(find_binary(current->cmd), 1, 0, argv, sc->envp);
-        }
-        free_split_array(argv);
-        current = current->pipe;
-    }
-    while(childs--) wait(NULL);
- */
+static void cmd_processor(t_process *ps);
 
 int launch_command(t_prompt *prompt, t_shell *sc, t_process_io io) {
-	resolve_process_io(prompt, &io);
+	t_process *command;
+    t_process_io pipe_io;
+    int pipefd[2];
+    int status;
 
+    command = (t_process*)ft_calloc(1,sizeof(t_process));
+    command->cmd = find_binary(prompt->cmd);
+    if(!command->cmd) return -123;
+    command->argv = list_to_array(prompt->parameter);
+    command->envp = sc->envp; //TODO: Envp used
+    command->io = io;
+    ft_memset(pipefd, 0, sizeof(pipefd));
+    if(prompt->pipe) {
+        pipe(pipefd);
+        command->io.sout = pipefd[1];
+        pipe_io.sin = pipefd[0];
+        pipe_io.sout = 1;
+    }
+    resolve_process_io(prompt, &command->io);
+    command->process_id = fork();
+    ft_lstadd_back(&sc->processes, ft_lstnew((void*)command));
+    if(command->process_id == 0) {
+        cmd_processor(command);
+    }
+    if(prompt->pipe) {
+        close(pipefd[1]);
+        launch_command(prompt->pipe, sc, pipe_io);
+    }
+    if(pipefd[0]) close(pipefd[0]);
+    waitpid(command->process_id, &status, 0);
+    if(!prompt->pipe) {
+        if(WIFEXITED(status))
+            sc->recent_exit_code = WEXITSTATUS(status);
+    }
 	return 0;
+}
+
+static void cmd_processor(t_process *ps) {
+    dup2(ps->io.sout, 1);
+    dup2(ps->io.sin, 0);
+    execve(ps->cmd, ps->argv, ps->envp);
 }
 
 static void resolve_process_io(t_prompt *prompt, t_process_io *io) {
@@ -52,15 +70,18 @@ static void resolve_process_io(t_prompt *prompt, t_process_io *io) {
 	current = prompt->redirect;
 	while(current) {
 		redirect = (t_redirect*)current->content;
-		redirect_status |= (1<<redirect->type);
+        if(redirect->type == R_FILE_OUTPUT ||
+                redirect->type == R_FILE_APPEND) {
+            if(redirect_status&1) close(io->sout);
+            io->sout = obtain_redirect_descriptor((t_redirect*)current->content);
+            if(!(redirect_status&1)) redirect_status |= 1;
+        } else {
+            if(redirect_status&2) close(io->sin);
+            io->sin = obtain_redirect_descriptor((t_redirect*)current->content);
+            if(!(redirect_status&2)) redirect_status |= (1<<1);
+        }
 		current = current->next;
 	}
-}
-
-static void cmd_processor(t_process ps) {
-	dup2(ps.io.sin, 1);
-	dup2(ps.io.sout, 0);
-	execve(ps.cmd, ps.argv, ps.envp);
 }
 
 static char* find_binary(char *cmd) {

@@ -65,8 +65,8 @@ int handle_prompt(char *prompt, t_shell *sc) {
 	t_prompt *prompt_data;
 
 	prompt_data = parse_prompt(prompt, sc);
-	//launch_command(prompt_data, sc);
-	debug_print(prompt_data);
+	//debug_print(prompt_data);
+    launch_command(prompt_data, sc, (t_process_io){0,1});
     free_prompt(prompt_data);
 	return 0;
 }

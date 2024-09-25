@@ -38,6 +38,7 @@ typedef unsigned long long uint64_t;
 
 typedef struct s_shell {
 	char **envp;
+    t_list *processes;
     int recent_exit_code; // Most recent exit code for $?
 } t_shell;
 
@@ -100,6 +101,7 @@ typedef struct s_process {
 } t_process;
 
 int launch_command(t_prompt *prompt, t_shell *sc, t_process_io);
+int obtain_redirect_descriptor(const t_redirect *redirect);
 
 //Misc
 void free_split_array(char **arr);
