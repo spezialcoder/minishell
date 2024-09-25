@@ -109,9 +109,9 @@ void free_prompt(t_prompt *prompt) {
 	current = prompt;
 	tmp = current;
 	while(current) {
-		free(current->cmd);
-		ft_lstclear(&current->parameter,free);
-		ft_lstclear(&current->redirect,free_t_redirect);
+		if(current->cmd) free(current->cmd);
+		if(current->parameter) ft_lstclear(&current->parameter,free);
+		if(current->redirect) ft_lstclear(&current->redirect,free_t_redirect);
 		current = current->pipe;
 		free(tmp);
 		tmp = current;

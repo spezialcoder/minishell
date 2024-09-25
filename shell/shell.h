@@ -46,7 +46,13 @@ typedef struct s_shell {
 int minishell_boot(char **envp);
 
 //Prompt
+typedef enum e_error {
+    E_CMD_NOT_FOUND=0,
+    E_OK=1
+} t_error;
+
 int show_prompt(t_shell *sc);
+void handle_error(t_error error);
 
 //Parser
 
@@ -100,9 +106,11 @@ typedef struct s_process {
 	char **envp;
 } t_process;
 
-int launch_command(t_prompt *prompt, t_shell *sc, t_process_io);
+t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io);
 int obtain_redirect_descriptor(const t_redirect *redirect);
 
 //Misc
 void free_split_array(char **arr);
 char	**list_to_array(t_list *lst);
+void free_t_process(void *addr);
+void ft_lstpop(t_list **lst, void (*del)(void*));

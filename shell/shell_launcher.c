@@ -14,18 +14,19 @@
 
 static char* find_binary(char *cmd);
 static char* concat_path_file(char *path, char *file);
-static void resolve_process_io(t_prompt *prompt, t_process_io *io);
+static void resolve_process_io(const t_prompt *prompt, t_process_io *io);
 static void cmd_processor(t_process *ps);
 
-int launch_command(t_prompt *prompt, t_shell *sc, t_process_io io) {
+t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io) {
 	t_process *command;
     t_process_io pipe_io;
     int pipefd[2];
     int status;
 
+    status = 0;
     command = (t_process*)ft_calloc(1,sizeof(t_process));
     command->cmd = find_binary(prompt->cmd);
-    if(!command->cmd) return -123;
+    if(!command->cmd) return (free(command), E_CMD_NOT_FOUND);
     command->argv = list_to_array(prompt->parameter);
     command->envp = sc->envp; //TODO: Envp used
     command->io = io;
@@ -48,11 +49,12 @@ int launch_command(t_prompt *prompt, t_shell *sc, t_process_io io) {
     }
     if(pipefd[0]) close(pipefd[0]);
     waitpid(command->process_id, &status, 0);
+    ft_lstpop(&sc->processes, free_t_process);
     if(!prompt->pipe) {
         if(WIFEXITED(status))
             sc->recent_exit_code = WEXITSTATUS(status);
     }
-	return 0;
+	return E_OK;
 }
 
 static void cmd_processor(t_process *ps) {
@@ -61,7 +63,7 @@ static void cmd_processor(t_process *ps) {
     execve(ps->cmd, ps->argv, ps->envp);
 }
 
-static void resolve_process_io(t_prompt *prompt, t_process_io *io) {
+static void resolve_process_io(const t_prompt *prompt, t_process_io *io) {
 	uint8_t redirect_status;
 	t_redirect *redirect;
 	t_list *current;

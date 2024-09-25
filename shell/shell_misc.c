@@ -46,3 +46,34 @@ void free_t_redirect(void *addr) {
 	free(redirect->prompt);
 	free(redirect);
 }
+
+void free_t_process(void *addr) {
+    t_process *ps;
+
+    ps = (t_process*)addr;
+    free(ps->cmd);
+    free_split_array(ps->argv);
+    free((void*)ps);
+}
+
+void ft_lstpop(t_list **lst, void (*del)(void*)) {
+    t_list *current;
+    t_list *prev;
+
+    if(!lst) return;
+    prev = NULL;
+    current = *lst;
+    if(current->next) {
+        while(current->next) {
+            prev = current;
+            current = current->next;
+        }
+        if(prev) {
+            prev->next = NULL;
+        }
+    } else {
+        *lst = NULL;
+    }
+    ft_lstdelone(current,del);
+
+}

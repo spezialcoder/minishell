@@ -50,12 +50,13 @@ int show_prompt(t_shell *sc) {
     char *prompt;
 
     prompt = "";
+    prompt = readline("minishell> ");
     while(prompt) {
-        prompt = readline("minishell> ");
         if(*prompt)
 			add_history(prompt);
         handle_prompt(prompt,sc);
 		free(prompt);
+        prompt = readline("minishell> ");
     }
     rl_clear_history();
     return 0;
@@ -63,10 +64,18 @@ int show_prompt(t_shell *sc) {
 
 int handle_prompt(char *prompt, t_shell *sc) {
 	t_prompt *prompt_data;
+    t_error status;
 
 	prompt_data = parse_prompt(prompt, sc);
 	//debug_print(prompt_data);
-    launch_command(prompt_data, sc, (t_process_io){0,1});
+    status = launch_command(prompt_data, sc, (t_process_io){0,1});
+    handle_error(status);
     free_prompt(prompt_data);
 	return 0;
+}
+
+void handle_error(t_error error) {
+    if(error == E_CMD_NOT_FOUND) {
+        printf("ERROR: command not found.\n");
+    }
 }
