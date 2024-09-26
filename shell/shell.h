@@ -108,10 +108,15 @@ typedef struct s_process {
 } t_process;
 
 t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io);
+t_error setup_process(t_process *ps, const t_prompt *prompt, const t_shell *sc, t_process_io io);
 int obtain_redirect_descriptor(const t_redirect *redirect);
+char* find_binary(char *cmd);
 
 //Misc
 void free_split_array(char **arr);
 char	**list_to_array(t_list *lst);
 void free_t_process(void *addr);
 void ft_lstpop(t_list **lst, void (*del)(void*));
+
+//Interface
+void setup_signal_handlers();

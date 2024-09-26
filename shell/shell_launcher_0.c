@@ -14,6 +14,10 @@
 
 static int delimiter_input(char *delim);
 
+t_error launch_builtin(t_prompt *prompt, t_shell *sc) {
+
+}
+
 int obtain_redirect_descriptor(const t_redirect *redirect) {
     if(redirect->type == R_FILE_INPUT) {
         return open(redirect->prompt,O_RDONLY);

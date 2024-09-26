@@ -16,6 +16,7 @@ int minishell_boot(char **envp) {
 	t_shell sc;
 
 	sc = (t_shell){envp, NULL, 0};
+    setup_signal_handlers();
     show_prompt(&sc);
 	return 0;
 }

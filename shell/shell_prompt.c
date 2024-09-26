@@ -52,9 +52,10 @@ int show_prompt(t_shell *sc) {
     prompt = "";
     prompt = readline("minishell> ");
     while(prompt) {
-        if(*prompt)
-			add_history(prompt);
-        handle_prompt(prompt,sc);
+        if(*prompt) {
+            add_history(prompt);
+            handle_prompt(prompt,sc);
+        }
 		free(prompt);
         prompt = readline("minishell> ");
     }
