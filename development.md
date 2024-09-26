@@ -17,7 +17,7 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 - [x] *Pipelining commands*
 - [ ] *Environment variables*
 - [x] *$? last exit status*
-- [ ] *Handle control signals (ctrl)*
+- [x] *Handle control signals (ctrl)*
 - [x] *Handle redirections*
 - [x] *Ignore \ or ;*
 
@@ -42,7 +42,7 @@ Shell cmd parser is contained in `shell/shell_parser.c`
 Feel free to write something here.
 
 ## Bugs
-check var not starting with number
+No bugs yet.
 
 
 ## Current

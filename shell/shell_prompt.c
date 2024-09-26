@@ -67,9 +67,11 @@ int handle_prompt(char *prompt, t_shell *sc) {
 	t_prompt *prompt_data;
     t_error status;
 
+    status = E_OK;
 	prompt_data = parse_prompt(prompt, sc);
 	//debug_print(prompt_data);
-    status = launch_command(prompt_data, sc, (t_process_io){0,1});
+    if(launch_builtin(prompt_data, sc) != E_OK)
+        status = launch_command(prompt_data, sc, (t_process_io){0,1});
     handle_error(status);
     free_prompt(prompt_data);
 	return 0;

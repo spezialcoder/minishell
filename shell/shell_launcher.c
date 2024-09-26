@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-static char* find_binary(char *cmd);
 static char* concat_path_file(char *path, char *file);
 static t_error resolve_process_io(const t_prompt *prompt, t_process_io *io);
 static void cmd_processor(t_process *ps);

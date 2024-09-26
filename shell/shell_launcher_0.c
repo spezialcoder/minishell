@@ -15,7 +15,18 @@
 static int delimiter_input(char *delim);
 
 t_error launch_builtin(t_prompt *prompt, t_shell *sc) {
+    t_size_t prompt_length;
 
+    prompt_length = ft_strlen(prompt->cmd);
+    if      (!ft_strncmp(prompt->cmd,"echo", prompt_length)) builtin_echo(sc,prompt);
+    else if(!ft_strncmp(prompt->cmd,"cd", prompt_length)) builtin_cd(sc,prompt);
+    else if(!ft_strncmp(prompt->cmd,"pwd", prompt_length)) builtin_pwd(sc);
+    else if(!ft_strncmp(prompt->cmd,"export", prompt_length)) builtin_export(sc,prompt);
+    else if(!ft_strncmp(prompt->cmd,"unset", prompt_length)) builtin_unset(sc,prompt);
+    else if(!ft_strncmp(prompt->cmd,"env", prompt_length)) builtin_env(sc,prompt);
+    else if(!ft_strncmp(prompt->cmd,"exit", prompt_length)) builtin_exit(sc,prompt);
+    else return (E_NOBUILTIN);
+    return (E_OK);
 }
 
 int obtain_redirect_descriptor(const t_redirect *redirect) {
@@ -44,6 +55,7 @@ static int delimiter_input(char *delim) {
         write(pipefd[1], "\n\0", 2);
         free(input);
         input = readline("> ");
+        if(!input) return -1;
     }
     return (close(pipefd[1]), pipefd[0]);
 }
