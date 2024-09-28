@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 19:31:14 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/28 17:37:37 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 #define STASH_SIZE 4096
 #define VAR_BUFFER 4096
 #define ARG_MAX 16384
-
-extern int received_signal;
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -111,10 +109,11 @@ typedef struct s_process {
 	char **envp;
 } t_process;
 
+typedef void(*t_builtin_ptr)(t_shell*,t_prompt*,t_process_io);
 t_error setup_process(t_process *ps, const t_prompt *prompt, const t_shell *sc, t_process_io io);
-t_error launch_command(const t_prompt *prompt, t_shell *sc, t_process_io io);
+t_error launch_command(t_prompt *prompt, t_shell *sc, t_process_io io);
 int obtain_redirect_descriptor(const t_redirect *redirect);
-t_error launch_builtin(t_prompt *prompt, t_shell *sc);
+t_builtin_ptr get_builtin(const t_prompt *prompt);
 char* find_binary(char *cmd);
 
 //Misc
@@ -127,10 +126,11 @@ void ft_lstpop(t_list **lst, void (*del)(void*));
 void setup_signal_handlers();
 
 //Builtins
-void builtin_echo(t_shell *sc, t_prompt *prompt);
-void builtin_cd(t_shell *sc, t_prompt *prompt);
-void builtin_pwd(t_shell *sc);
-void builtin_export(t_shell *sc, t_prompt *prompt);
-void builtin_unset(t_shell *sc, t_prompt *prompt);
-void builtin_env(t_shell *sc, t_prompt *prompt);
-void builtin_exit(t_shell *sc, t_prompt *prompt);
+void builtin_echo(t_shell *sc, t_prompt *prompt, t_process_io io);
+void builtin_cd(t_shell *sc, t_prompt *prompt, t_process_io io);
+void builtin_pwd(t_shell *sc, t_prompt *prompt, t_process_io io);
+void builtin_export(t_shell *sc, t_prompt *prompt, t_process_io io);
+void builtin_unset(t_shell *sc, t_prompt *prompt, t_process_io io);
+void builtin_env(t_shell *sc, t_prompt *prompt, t_process_io io);
+void builtin_exit(t_shell *sc, t_prompt *prompt, t_process_io io);
+

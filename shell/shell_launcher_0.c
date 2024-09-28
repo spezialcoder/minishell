@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:30:39 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/23 19:42:24 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/09/28 17:46:56 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,18 @@
 
 static int delimiter_input(char *delim);
 
-t_error launch_builtin(t_prompt *prompt, t_shell *sc) {
+t_builtin_ptr get_builtin(const t_prompt *prompt) {
     t_size_t prompt_length;
 
     prompt_length = ft_strlen(prompt->cmd);
-    if      (!ft_strncmp(prompt->cmd,"echo", prompt_length)) builtin_echo(sc,prompt);
-    else if(!ft_strncmp(prompt->cmd,"cd", prompt_length)) builtin_cd(sc,prompt);
-    else if(!ft_strncmp(prompt->cmd,"pwd", prompt_length)) builtin_pwd(sc);
-    else if(!ft_strncmp(prompt->cmd,"export", prompt_length)) builtin_export(sc,prompt);
-    else if(!ft_strncmp(prompt->cmd,"unset", prompt_length)) builtin_unset(sc,prompt);
-    else if(!ft_strncmp(prompt->cmd,"env", prompt_length)) builtin_env(sc,prompt);
-    else if(!ft_strncmp(prompt->cmd,"exit", prompt_length)) builtin_exit(sc,prompt);
-    else return (E_NOBUILTIN);
-    return (E_OK);
+    if      (!ft_strncmp(prompt->cmd,"echo", prompt_length)) return(builtin_echo);
+    else if(!ft_strncmp(prompt->cmd,"cd", prompt_length)) return(builtin_cd);
+    else if(!ft_strncmp(prompt->cmd,"pwd", prompt_length)) return(builtin_pwd);
+    else if(!ft_strncmp(prompt->cmd,"export", prompt_length)) return(builtin_export);
+    else if(!ft_strncmp(prompt->cmd,"unset", prompt_length)) return(builtin_unset);
+    else if(!ft_strncmp(prompt->cmd,"env", prompt_length)) return(builtin_env);
+    else if(!ft_strncmp(prompt->cmd,"exit", prompt_length)) return(builtin_exit);
+    return (NULL);
 }
 
 int obtain_redirect_descriptor(const t_redirect *redirect) {
@@ -59,3 +58,4 @@ static int delimiter_input(char *delim) {
     }
     return (close(pipefd[1]), pipefd[0]);
 }
+
