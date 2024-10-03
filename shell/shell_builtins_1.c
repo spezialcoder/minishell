@@ -13,9 +13,17 @@
 #include "shell.h"
 
 void builtin_env(t_shell *sc, t_prompt *prompt, t_process_io io) {
+    int idx;
 
+    idx = 0;
+    while(sc->envp[idx]) {
+        printf("%s\n", sc->envp[idx]);
+        idx++;
+    }
+    printf("\033[0m");
 }
 
+__attribute__((noreturn))
 void builtin_exit(t_shell *sc, t_prompt *prompt, t_process_io io) {
-
+    exit(0);
 }

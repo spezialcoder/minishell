@@ -33,7 +33,11 @@ void setup_signal_handlers() {
 }
 
 t_error setup_process(t_process *ps, const t_prompt *prompt, const t_shell *sc, t_process_io io) {
-    ps->cmd = find_binary(prompt->cmd);
+    if (get_builtin(prompt)) {
+        ps->cmd = ft_strdup("builtin");
+    } else {
+        ps->cmd = find_binary(prompt->cmd);
+    }
     if(!ps->cmd) return (free(ps), E_CMD_NOT_FOUND);
     ps->argv = list_to_array(prompt->parameter);
     ps->envp = sc->envp; //TODO: Envp used
