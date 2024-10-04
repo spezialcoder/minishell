@@ -12,40 +12,6 @@
 
 #include "shell.h"
 
-static void debug_print(t_prompt *prompt_data) {
-	t_list *tmp;
-	tmp = prompt_data->parameter;
-	printf("CMD: %s\n",prompt_data->cmd);
-	printf("Argc: %d\n",prompt_data->argc);
-	for(int i = 0; i < ft_lstsize(prompt_data->parameter); i++) {
-		printf("ARGV %s\n", (char*)tmp->content);
-		tmp = tmp->next;
-	}
-	tmp = prompt_data->redirect;
-	for(int i = 0; i < ft_lstsize(prompt_data->redirect); i++) {
-		switch(((t_redirect*)tmp->content)->type) {
-			case R_FILE_INPUT:
-				printf("Redirect Input ");
-				break;
-			case R_FILE_OUTPUT:
-				printf("Redirect Output ");
-				break;
-			case R_FILE_APPEND:
-				printf("Redirect Append ");
-				break;
-			case R_DELIMITER:
-				printf("Redirect Delimit ");
-				break;
-			default:
-				printf("Invalid Redirect: ");
-				break;
-		}
-		printf("%s\n", ((t_redirect *)tmp->content)->prompt);
-		tmp = tmp->next;
-	}
-	if(prompt_data->pipe) debug_print(prompt_data->pipe);
-}
-
 int show_prompt(t_shell *sc) {
     char *prompt;
 

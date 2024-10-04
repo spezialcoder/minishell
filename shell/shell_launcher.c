@@ -110,14 +110,14 @@ static t_error resolve_process_io(const t_prompt *prompt, t_process_io *io) {
     return (E_OK);
 }
 
-char* find_binary(char *cmd) {
+char *find_binary(char *cmd, t_shell *sc) {
 	char **path;
 	char *path_str;
 	char *binary;
 	uint32_t path_idx;
 
 	if(!cmd) return (NULL);
-	path_str = getenv("PATH");
+    path_str = minishell_getenv(sc, "PATH");
 	if(access(cmd, F_OK | X_OK) == 0)
 		return (ft_memcpy(ft_calloc(1, ft_strlen(cmd)+1), cmd, ft_strlen(cmd)));
 	if(!path_str)

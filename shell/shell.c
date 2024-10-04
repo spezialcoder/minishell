@@ -24,8 +24,14 @@ int minishell_boot(char **envp) {
 	disable_ctrl_echo();
     setup_signal_handlers();
     show_prompt(&sc);
-    minishell_cleanup(&sc);
-	return 0;
+    minishell_shutdown(&sc, 0);
+	return (0);
+}
+
+__attribute__((noreturn))
+void minishell_shutdown(t_shell *sc, int code) {
+    minishell_cleanup(sc);
+    exit(code);
 }
 
 static void minishell_cleanup(t_shell *sc) {

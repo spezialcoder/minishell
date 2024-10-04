@@ -1,7 +1,7 @@
 #include "shell.h"
 
-static char* extract_key(char *entry);
-static char* extract_value(char *entry);
+char* extract_key(char *entry);
+char* extract_value(char *entry);
 static char* make_str(char *key, char *value);
 
 void init_environment(t_environment *env, char **envp) {
@@ -48,7 +48,7 @@ static char* make_str(char *key, char *value) {
     return (string);
 }
 
-static char* extract_key(char *entry) {
+char* extract_key(char *entry) {
     char *key;
     char *end;
     t_size_t len;
@@ -61,7 +61,7 @@ static char* extract_key(char *entry) {
     return (key);
 }
 
-static char *extract_value(char *entry) {
+char *extract_value(char *entry) {
     char *value;
     char *start;
 

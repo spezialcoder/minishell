@@ -12,12 +12,17 @@
 
 #include "shell.h"
 
+extern char* extract_key(char *entry);
+extern char* extract_value(char *entry);
+
 void builtin_echo(t_shell *sc, t_prompt *prompt, t_process_io io) {
 	t_list *param;
     int nl;
 
-	param = (t_list*)prompt->parameter->next;
-    nl = ft_strncmp((char *) param->content, "-n",2);
+    nl = -1;
+    param = (t_list*)prompt->parameter->next;
+    if(param)
+        nl = ft_strncmp((char *) param->content, "-n",2);
     if (!nl) {
         param = param->next;
     }
@@ -59,7 +64,22 @@ void builtin_pwd(t_shell *sc, t_prompt *prompt, t_process_io io) {
 }
 
 void builtin_export(t_shell *sc, t_prompt *prompt, t_process_io io) {
-
+    char *key;
+    char *value;
+    char *str;
+    if(prompt->argc != 2) {
+        printf("ERROR: export KEY=VALUE\n");
+        return;
+    }
+    str = (char*)prompt->parameter->next->content;
+    key = extract_key(str);
+    value = extract_value(str);
+    if(!key || !value) {
+        printf("ERROR: export syntax error.\n");
+        return;
+    }
+    add_environ(&sc->environ, key, value);
+    update_shell_environ(sc);
 }
 
 void builtin_unset(t_shell *sc, t_prompt *prompt, t_process_io io) {

@@ -47,7 +47,7 @@ char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
 					sp.env_var[sp.stash_idx++] = str[idx];
 				}
                 sp.env_var[sp.stash_idx] = 0;
-                var_content = getenv(sp.env_var);
+                var_content = minishell_getenv(sc,sp.env_var);
             }
 			if(var_content) {
 				sp.tmp_var_len = ft_strlen(var_content);

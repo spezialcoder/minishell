@@ -51,6 +51,7 @@ typedef struct s_shell {
 
 //Minishell main
 int minishell_boot(char **envp);
+void minishell_shutdown(t_shell *sc, int code);
 
 //Prompt
 typedef enum e_error {
@@ -117,11 +118,11 @@ typedef struct s_process {
 } t_process;
 
 typedef void(*t_builtin_ptr)(t_shell*,t_prompt*,t_process_io);
-t_error setup_process(t_process *ps, const t_prompt *prompt, const t_shell *sc, t_process_io io);
+t_error setup_process(t_process *ps, const t_prompt *prompt, t_shell *sc, t_process_io io);
 t_error launch_command(t_prompt *prompt, t_shell *sc, t_process_io io);
 int obtain_redirect_descriptor(const t_redirect *redirect);
 t_builtin_ptr get_builtin(const t_prompt *prompt);
-char* find_binary(char *cmd);
+char *find_binary(char *cmd, t_shell *sc);
 
 //Misc
 void free_split_array(char **arr);
@@ -146,3 +147,5 @@ void builtin_exit(t_shell *sc, t_prompt *prompt, t_process_io io);
 void init_environment(t_environment *env, char **envp);
 char **environ_to_array(t_environment *env);
 void update_shell_environ(t_shell *sc);
+char *minishell_getenv(t_shell *sc, char *key);
+void add_environ(t_environment *env, char *key, char *str);

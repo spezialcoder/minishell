@@ -25,5 +25,5 @@ void builtin_env(t_shell *sc, t_prompt *prompt, t_process_io io) {
 
 __attribute__((noreturn))
 void builtin_exit(t_shell *sc, t_prompt *prompt, t_process_io io) {
-    exit(0);
+    minishell_shutdown(sc, 0);
 }
