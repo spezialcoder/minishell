@@ -36,8 +36,15 @@ typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
 
+typedef struct s_environment {
+    char **key;
+    char **value;
+    t_size_t size;
+} t_environment;
+
 typedef struct s_shell {
-	char **envp;
+	t_environment environ;
+    char **envp;
     t_list *processes;
     int recent_exit_code; // Most recent exit code for $?
 } t_shell;
@@ -134,3 +141,8 @@ void builtin_unset(t_shell *sc, t_prompt *prompt, t_process_io io);
 void builtin_env(t_shell *sc, t_prompt *prompt, t_process_io io);
 void builtin_exit(t_shell *sc, t_prompt *prompt, t_process_io io);
 
+//Environ
+
+void init_environment(t_environment *env, char **envp);
+char **environ_to_array(t_environment *env);
+void update_shell_environ(t_shell *sc);

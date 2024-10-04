@@ -13,15 +13,25 @@
 #include "shell.h"
 
 static void disable_ctrl_echo();
+static void minishell_cleanup(t_shell *sc);
 
 int minishell_boot(char **envp) {
 	t_shell sc;
 
-	sc = (t_shell){envp, NULL, 0};
+    sc = (t_shell) {.processes = NULL, .recent_exit_code=0};
+    init_environment(&sc.environ, envp);
+    update_shell_environ(&sc);
 	disable_ctrl_echo();
     setup_signal_handlers();
     show_prompt(&sc);
+    minishell_cleanup(&sc);
 	return 0;
+}
+
+static void minishell_cleanup(t_shell *sc) {
+    if(sc->envp) free_split_array(sc->envp);
+    if(sc->environ.value) free_split_array(sc->environ.value);
+    if(sc->environ.key) free_split_array(sc->environ.key);
 }
 
 static void disable_ctrl_echo() {
