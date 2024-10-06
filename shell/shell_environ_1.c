@@ -38,12 +38,45 @@ void add_environ(t_environment *env, char *key, char *str) {
         new_val_arr = ft_calloc(env->size+2, sizeof(char*));
         ft_memcpy(new_key_arr, env->key, env->size*sizeof(char*));
         ft_memcpy(new_val_arr, env->value, env->size*sizeof(char*));
-        new_key_arr[env->size] = key;
-        new_val_arr[env->size] = str;
+        new_key_arr[env->size] = ft_strdup(key);
+        new_val_arr[env->size] = ft_strdup(str);
         free(env->key);
         free(env->value);
         env->key = new_key_arr;
         env->value = new_val_arr;
         env->size++;
     }
+}
+
+void del_environ(t_environment *env, char *key) {
+    t_size_t idx;
+    t_size_t new_idx;
+    char **new_key_var;
+    char **new_value_var;
+
+    idx = 0;
+    new_idx = 0;
+    while(idx < env->size) {
+        if(!ft_strncmp(env->key[idx],key,ft_strlen(key)+1)) break;
+        idx++;
+    }
+    if(idx == env->size) return;
+    idx = 0;
+    new_key_var = ft_calloc(env->size, sizeof(char*));
+    new_value_var = ft_calloc(env->size, sizeof(char*));
+    while(idx < env->size) {
+        if(ft_strncmp(env->key[idx],key,ft_strlen(key)+1)) {
+            new_key_var[new_idx] = env->key[idx];
+            new_value_var[new_idx++] = env->value[idx];
+        } else {
+            free(env->key[idx]);
+            free(env->value[idx]);
+        }
+        idx++;
+    }
+    free(env->key);
+    free(env->value);
+    env->key = new_key_var;
+    env->value = new_value_var;
+    env->size = env->size-1;
 }

@@ -149,3 +149,4 @@ char **environ_to_array(t_environment *env);
 void update_shell_environ(t_shell *sc);
 char *minishell_getenv(t_shell *sc, char *key);
 void add_environ(t_environment *env, char *key, char *str);
+void del_environ(t_environment *env, char *key);

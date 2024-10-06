@@ -80,8 +80,17 @@ void builtin_export(t_shell *sc, t_prompt *prompt, t_process_io io) {
     }
     add_environ(&sc->environ, key, value);
     update_shell_environ(sc);
+    free(key);
+    free(value);
 }
 
 void builtin_unset(t_shell *sc, t_prompt *prompt, t_process_io io) {
-
+    char *key;
+    if(prompt->argc != 2) {
+        printf("ERROR: unset VAR\n");
+        return;
+    }
+    key = (char*)prompt->parameter->next->content;
+    del_environ(&sc->environ,key);
+    update_shell_environ(sc);
 }

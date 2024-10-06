@@ -18,13 +18,13 @@ t_builtin_ptr get_builtin(const t_prompt *prompt) {
     t_size_t prompt_length;
 
     prompt_length = ft_strlen(prompt->cmd);
-    if      (!ft_strncmp(prompt->cmd,"echo", prompt_length)) return(builtin_echo);
-    else if(!ft_strncmp(prompt->cmd,"cd", prompt_length)) return(builtin_cd);
-    else if(!ft_strncmp(prompt->cmd,"pwd", prompt_length)) return(builtin_pwd);
-    else if(!ft_strncmp(prompt->cmd,"export", prompt_length)) return(builtin_export);
-    else if(!ft_strncmp(prompt->cmd,"unset", prompt_length)) return(builtin_unset);
-    else if(!ft_strncmp(prompt->cmd,"env", prompt_length)) return(builtin_env);
-    else if(!ft_strncmp(prompt->cmd,"exit", prompt_length)) return(builtin_exit);
+    if      (!ft_strncmp(prompt->cmd,"echo", 5)) return(builtin_echo);
+    else if(!ft_strncmp(prompt->cmd,"cd", 3)) return(builtin_cd);
+    else if(!ft_strncmp(prompt->cmd,"pwd", 4)) return(builtin_pwd);
+    else if(!ft_strncmp(prompt->cmd,"export", 7)) return(builtin_export);
+    else if(!ft_strncmp(prompt->cmd,"unset", 6)) return(builtin_unset);
+    else if(!ft_strncmp(prompt->cmd,"env", 4)) return(builtin_env);
+    else if(!ft_strncmp(prompt->cmd,"exit", 5)) return(builtin_exit);
     return (NULL);
 }
 

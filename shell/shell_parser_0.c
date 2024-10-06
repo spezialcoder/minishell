@@ -40,7 +40,7 @@ char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
                 idx++;
             } else {
                 while(is_valid_var_char(str[++idx]) && idx < ssize) {
-					if(str[idx] >= '0' && str[idx] <= '9') {
+					if(str[idx] >= '0' && str[idx] <= '9' && idx == 0) {
 						idx++;
 						break;
 					}
