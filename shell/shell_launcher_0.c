@@ -15,9 +15,6 @@
 static int delimiter_input(char *delim);
 
 t_builtin_ptr get_builtin(const t_prompt *prompt) {
-    t_size_t prompt_length;
-
-    prompt_length = ft_strlen(prompt->cmd);
     if      (!ft_strncmp(prompt->cmd,"echo", 5)) return(builtin_echo);
     else if(!ft_strncmp(prompt->cmd,"cd", 3)) return(builtin_cd);
     else if(!ft_strncmp(prompt->cmd,"pwd", 4)) return(builtin_pwd);

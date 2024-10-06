@@ -22,9 +22,9 @@ t_prompt* parse_prompt(char *prompt, t_shell *sc) {
 	uint32_t stash_idx;
 	uint8_t quote_mode;
 
-	prompt = handle_string(prompt, ft_strlen(prompt), sc);
     result = (t_prompt*)ft_calloc(1,sizeof(t_prompt));
 	result->argc = 0;
+    result->cmd = "";
 	char_stash = (char*)malloc(sizeof(char)*STASH_SIZE);
 	idx = 0;
 	stash_idx = 0;
@@ -49,7 +49,7 @@ t_prompt* parse_prompt(char *prompt, t_shell *sc) {
 		idx++;
 	}
 	stash_it(&stash_idx, char_stash, result);
-    return (free(char_stash), free(prompt), result);
+    return (free(char_stash), result);
 }
 
 static void stash_it(uint32_t *stash_idx, char *char_stash, t_prompt *prompt) {

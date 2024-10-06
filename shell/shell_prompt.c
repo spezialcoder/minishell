@@ -14,13 +14,19 @@
 
 int show_prompt(t_shell *sc) {
     char *prompt;
+    char *altered_prompt;
 
     prompt = "";
+    altered_prompt = NULL;
     prompt = readline("minishell> ");
     while(prompt) {
+        altered_prompt = handle_string(prompt, ft_strlen(prompt), sc);
         if(*prompt) {
             add_history(prompt);
-            handle_prompt(prompt,sc);
+            if(altered_prompt && *altered_prompt)  {
+                handle_prompt(altered_prompt,sc);
+                free(altered_prompt);
+            }
         }
 		free(prompt);
         prompt = readline("minishell> ");

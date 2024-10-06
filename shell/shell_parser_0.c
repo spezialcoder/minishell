@@ -21,6 +21,7 @@ char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
 	struct s_string_parser sp;
     char *var_content;
 
+    if(!str || !*str) return (str);
 	sp.env_var = (char*)malloc(sizeof(char)*VAR_BUFFER);
 	sp.arg_buffer = (char*)malloc(sizeof(char)*ARG_MAX);
 	quote_mode = 0;
@@ -28,7 +29,7 @@ char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
 	out_idx = 0;
 	sp.stash_idx = 0;
 	while(idx < ssize) {
-		if(str[idx] == '\"') {
+		if(str[idx] == '\"' && !(quote_mode&2)) {
 			quote_mode ^= 1;
 		}
 		else if(str[idx] == '\'' && !(quote_mode&1)) {
@@ -67,7 +68,7 @@ char* handle_string(char *str, uint32_t ssize, t_shell *sc) {
 }
 
 uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, char *char_stash, uint32_t *stash_idx) {
-	if(prompt[*idx] == '\"') {
+	if(prompt[*idx] == '\"' && !(*quote_mode&2)) {
 		if(!(*quote_mode&2) && (*quote_mode&1) &&
 		   *stash_idx == 0) {
 			char_stash[0] = 0;
@@ -83,7 +84,7 @@ uint8_t handle_quote(const char *prompt, uint64_t *idx, uint8_t *quote_mode, cha
 
 			return(1);
 		}
-	} else if(prompt[*idx] == '\'') {
+	} else if(prompt[*idx] == '\'' && !(*quote_mode&1)) {
 		if((*quote_mode&2) && !(*quote_mode&1) &&
 		   *stash_idx == 0) {
 			char_stash[0] = 0;
