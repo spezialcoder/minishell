@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:30:39 by lsorg             #+#    #+#             */
-/*   Updated: 2024/09/28 17:46:56 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:58:34 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ int	obtain_redirect_descriptor(const t_redirect *redirect)
 	}
 	else if (redirect->type == R_FILE_OUTPUT)
 	{
-		return (open(redirect->prompt, O_WRONLY | O_CREAT));
+		return (open(redirect->prompt, O_WRONLY | O_TRUNC | O_CREAT, 0644));
 	}
 	else if (redirect->type == R_FILE_APPEND)
 	{
-		return (open(redirect->prompt, O_WRONLY | O_APPEND, O_CREAT));
+		return (open(redirect->prompt, O_WRONLY | O_APPEND | O_CREAT, 0644));
 	}
 	else if (redirect->type == R_DELIMITER)
 	{
@@ -64,7 +64,7 @@ static int	delimiter_input(char *delim)
 		return (-1);
 	}
 	input = readline("> ");
-	while (ft_memcmp(input, delim, ft_strlen(input)))
+	while (ft_memcmp(input, delim, ft_strlen(input)+1))
 	{
 		write(pipefd[1], input, ft_strlen(input));
 		write(pipefd[1], "\n\0", 2);
@@ -73,5 +73,6 @@ static int	delimiter_input(char *delim)
 		if (!input)
 			return (-1);
 	}
+	if(input) free(input);
 	return (close(pipefd[1]), pipefd[0]);
 }

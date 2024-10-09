@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:43:09 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:48:27 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	handle_prompt(char *prompt, t_shell *sc)
 
 	prompt_data = parse_prompt(prompt, sc);
 	if (!prompt_data || !prompt_data->cmd)
-		return (0);
+		return (free_prompt(prompt_data), 0);
 	status = launch_command(prompt_data, sc, (t_process_io){0, 1});
 	handle_error(status, sc);
 	free_prompt(prompt_data);

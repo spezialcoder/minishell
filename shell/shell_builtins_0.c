@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:30:57 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/09 16:32:34 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:36:15 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	builtin_cd(t_shell *sc, t_prompt *prompt, t_process_io io)
 {
 	char	*new_path;
 	char	*tmp;
-	char	*tmp2;
+	char	pwd[PATH_MAX];
 	t_list	*param;
 
 	param = prompt->parameter->next;
@@ -61,7 +61,8 @@ void	builtin_cd(t_shell *sc, t_prompt *prompt, t_process_io io)
 		} else {
 			tmp = minishell_getenv(sc, "PWD");
 			add_environ(&sc->environ,"OLDPWD",tmp);
-			add_environ(&sc->environ,"PWD",new_path);
+			getcwd(pwd, PATH_MAX);
+			add_environ(&sc->environ,"PWD",pwd);
 			update_shell_environ(sc);
 		}
 	}
