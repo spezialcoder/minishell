@@ -87,11 +87,10 @@ t_uint8_t	handle_quote(struct s_handle_quote q)
 			(*q.stash_idx)++;
 		}
 		*q.quote_mode ^= 1;
-		if (q.prompt[++(*q.idx)] == '\"' ||
-		q.prompt[*q.idx] == '\'') {
+		if (q.prompt[++(*q.idx)] == '\"' || q.prompt[*q.idx] == '\'')
+		{
 			return (handle_quote(q), 1);
 		}
-
 		return (1);
 	}
 	else if (q.prompt[*q.idx] == '\'' && !(*q.quote_mode & 1))
@@ -102,8 +101,7 @@ t_uint8_t	handle_quote(struct s_handle_quote q)
 			(*q.stash_idx)++;
 		}
 		*q.quote_mode ^= 2;
-		if (q.prompt[++(*q.idx)] == '\'' ||
-			q.prompt[*q.idx] == '\"')
+		if (q.prompt[++(*q.idx)] == '\'' || q.prompt[*q.idx] == '\"')
 			return (handle_quote(q), 1);
 		return (1);
 	}

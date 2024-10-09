@@ -26,7 +26,8 @@ int	show_prompt(t_shell *sc)
 		if (altered_prompt)
 		{
 			handle_prompt(altered_prompt, sc);
-			if(*prompt) free(altered_prompt);
+			if (*prompt)
+				free(altered_prompt);
 		}
 		free(prompt);
 		prompt = readline("minishell> ");

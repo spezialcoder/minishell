@@ -15,8 +15,8 @@
 void	del_environ_norm(t_environment *env, const char *key, t_size_t idx,
 		t_size_t new_idx)
 {
-	char	**new_key_var;
-	char	**new_value_var;
+	char **new_key_var;
+	char **new_value_var;
 
 	new_key_var = ft_calloc(env->size, sizeof(char *));
 	new_value_var = ft_calloc(env->size, sizeof(char *));

@@ -55,10 +55,14 @@ void	free_t_process(void *addr)
 	t_process	*ps;
 
 	ps = (t_process *)addr;
-	if(!ps) return;
-	if(ps->cmd) free(ps->cmd);
-	if(ps->argv) free_split_array(ps->argv);
-	if(ps) free((void *)ps);
+	if (!ps)
+		return ;
+	if (ps->cmd)
+		free(ps->cmd);
+	if (ps->argv)
+		free_split_array(ps->argv);
+	if (ps)
+		free((void *)ps);
 }
 
 void	ft_lstpop(t_list **lst, void (*del)(void *))

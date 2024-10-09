@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:30:57 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/09 16:36:15 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 20:28:42 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern char	*extract_key(char *entry);
 extern char	*extract_value(char *entry);
 
 void	builtin_echo(__attribute__((unused)) t_shell *sc, t_prompt *prompt,
-	t_process_io io)
+		t_process_io io)
 {
 	t_list	*param;
 	int		nl;
@@ -40,9 +40,8 @@ void	builtin_echo(__attribute__((unused)) t_shell *sc, t_prompt *prompt,
 		write(io.sout, "\n", 1);
 }
 
-// TODO: Set paths and resolve ~ and -
 void	builtin_cd(t_shell *sc, t_prompt *prompt,
-	__attribute__((unused)) t_process_io io)
+		__attribute__((unused)) t_process_io io)
 {
 	char	*new_path;
 	char	pwd[PATH_MAX];
@@ -71,7 +70,7 @@ void	builtin_cd(t_shell *sc, t_prompt *prompt,
 }
 
 void	builtin_pwd(__attribute__((unused)) t_shell *sc,
-					__attribute__((unused)) t_prompt *prompt, t_process_io io)
+		__attribute__((unused)) t_prompt *prompt, t_process_io io)
 {
 	char	pwd[PATH_MAX];
 
@@ -81,7 +80,7 @@ void	builtin_pwd(__attribute__((unused)) t_shell *sc,
 }
 
 void	builtin_export(t_shell *sc, t_prompt *prompt,
-	__attribute__((unused)) t_process_io io)
+		__attribute__((unused)) t_process_io io)
 {
 	char	*key;
 	char	*value;
@@ -107,7 +106,7 @@ void	builtin_export(t_shell *sc, t_prompt *prompt,
 }
 
 void	builtin_unset(t_shell *sc, t_prompt *prompt,
-	__attribute__((unused)) t_process_io io)
+		__attribute__((unused)) t_process_io io)
 {
 	char	*key;
 

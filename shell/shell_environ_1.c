@@ -35,8 +35,8 @@ char	*minishell_getenv(t_shell *sc, char *key)
 
 void	create_element(t_environment *env, const char *key, const char *str)
 {
-	char		**new_key_arr;
-	char		**new_val_arr;
+	char	**new_key_arr;
+	char	**new_val_arr;
 
 	new_key_arr = ft_calloc(env->size + 2, sizeof(char *));
 	new_val_arr = ft_calloc(env->size + 2, sizeof(char *));

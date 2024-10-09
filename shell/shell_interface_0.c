@@ -42,7 +42,7 @@ void	setup_signal_handlers(void)
 t_error	setup_process(t_process *ps, const t_prompt *prompt, t_shell *sc,
 		t_process_io io)
 {
-	if(!*prompt->cmd)
+	if (!*prompt->cmd)
 		return (E_CMD_NOT_FOUND);
 	if (get_builtin(prompt))
 	{
