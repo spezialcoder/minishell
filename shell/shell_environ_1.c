@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 15:30:25 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 15:30:25 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:30:31 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ void	add_environ(t_environment *env, char *key, char *str)
 
 void	del_environ(t_environment *env, char *key)
 {
-	t_size_t idx;
-	t_size_t new_idx;
-	char **new_key_var;
-	char **new_value_var;
+	t_size_t	idx;
+	t_size_t	new_idx;
+	char		**new_key_var;
+	char		**new_value_var;
 
 	idx = 0;
 	new_idx = 0;
@@ -108,4 +108,13 @@ void	del_environ(t_environment *env, char *key)
 	env->key = new_key_var;
 	env->value = new_value_var;
 	env->size = env->size - 1;
+}
+
+void export_print(t_shell *sc) {
+	t_size_t idx;
+
+	idx = 0;
+	while(sc->envp[idx]) {
+		printf("declare -x %s\n", sc->envp[idx++]);
+	}
 }

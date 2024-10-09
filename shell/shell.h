@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:53:15 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:17:12 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_shell
 	t_environment			environ;
 	char					**envp;
 	t_list					*processes;
-	t_list					*exports;
 	int						recent_exit_code;
 }							t_shell;
 
@@ -177,3 +176,4 @@ char						*minishell_getenv(t_shell *sc, char *key);
 void						add_environ(t_environment *env, char *key,
 								char *str);
 void						del_environ(t_environment *env, char *key);
+void 						export_print(t_shell *sc) ;

@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 14:30:57 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 19:02:26 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:32:34 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,26 @@ void	builtin_echo(t_shell *sc, t_prompt *prompt, t_process_io io)
 void	builtin_cd(t_shell *sc, t_prompt *prompt, t_process_io io)
 {
 	char	*new_path;
+	char	*tmp;
+	char	*tmp2;
 	t_list	*param;
 
 	param = prompt->parameter->next;
 	if (param)
-	{
 		new_path = (char *)param->content;
-	}
 	else
 	{
 		printf("ERROR: cmd requires arguments.\n");
 		return ;
 	}
-	if (new_path)
-	{
-		if (chdir(new_path) == -1)
-		{
+	if (new_path) {
+		if (chdir(new_path) == -1) {
 			printf("ERROR: cmd unable to change directory.\n");
+		} else {
+			tmp = minishell_getenv(sc, "PWD");
+			add_environ(&sc->environ,"OLDPWD",tmp);
+			add_environ(&sc->environ,"PWD",new_path);
+			update_shell_environ(sc);
 		}
 	}
 }
@@ -82,7 +85,7 @@ void	builtin_export(t_shell *sc, t_prompt *prompt, t_process_io io)
 
 	if (prompt->argc != 2)
 	{
-		printf("ERROR: export KEY=VALUE\n");
+		export_print(sc);
 		return ;
 	}
 	str = (char *)prompt->parameter->next->content;

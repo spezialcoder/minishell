@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:40:39 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 16:14:14 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static void	minishell_cleanup(t_shell *sc)
 		free_split_array(sc->environ.value);
 	if (sc->environ.key)
 		free_split_array(sc->environ.key);
+	ft_lstclear(&sc->exports,free);
 }
 
 static void	disable_ctrl_echo(void)
