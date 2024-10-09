@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/09 16:17:01 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 20:26:08 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	setup_signal_handlers(void)
 t_error	setup_process(t_process *ps, const t_prompt *prompt, t_shell *sc,
 		t_process_io io)
 {
+	if(!*prompt->cmd)
+		return (E_CMD_NOT_FOUND);
 	if (get_builtin(prompt))
 	{
 		ps->cmd = ft_strdup("builtin");
@@ -51,9 +53,20 @@ t_error	setup_process(t_process *ps, const t_prompt *prompt, t_shell *sc,
 		ps->cmd = find_binary(prompt->cmd, sc);
 	}
 	if (!ps->cmd)
-		return (free(ps), E_CMD_NOT_FOUND);
+		return (E_CMD_NOT_FOUND);
 	ps->argv = list_to_array(prompt->parameter);
 	ps->envp = sc->envp;
 	ps->io = io;
 	return (E_OK);
+}
+
+void	export_print(t_shell *sc)
+{
+	t_size_t	idx;
+
+	idx = 0;
+	while (sc->envp[idx])
+	{
+		printf("declare -x %s\n", sc->envp[idx++]);
+	}
 }

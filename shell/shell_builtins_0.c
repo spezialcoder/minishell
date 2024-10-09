@@ -15,7 +15,8 @@
 extern char	*extract_key(char *entry);
 extern char	*extract_value(char *entry);
 
-void	builtin_echo(t_shell *sc, t_prompt *prompt, t_process_io io)
+void	builtin_echo(__attribute__((unused)) t_shell *sc, t_prompt *prompt,
+	t_process_io io)
 {
 	t_list	*param;
 	int		nl;
@@ -39,11 +40,11 @@ void	builtin_echo(t_shell *sc, t_prompt *prompt, t_process_io io)
 		write(io.sout, "\n", 1);
 }
 
-//TODO: Set paths and resolve ~ and -
-void	builtin_cd(t_shell *sc, t_prompt *prompt, t_process_io io)
+// TODO: Set paths and resolve ~ and -
+void	builtin_cd(t_shell *sc, t_prompt *prompt,
+	__attribute__((unused)) t_process_io io)
 {
 	char	*new_path;
-	char	*tmp;
 	char	pwd[PATH_MAX];
 	t_list	*param;
 
@@ -55,20 +56,22 @@ void	builtin_cd(t_shell *sc, t_prompt *prompt, t_process_io io)
 		printf("ERROR: cmd requires arguments.\n");
 		return ;
 	}
-	if (new_path) {
-		if (chdir(new_path) == -1) {
+	if (new_path)
+	{
+		if (chdir(new_path) == -1)
 			printf("ERROR: cmd unable to change directory.\n");
-		} else {
-			tmp = minishell_getenv(sc, "PWD");
-			add_environ(&sc->environ,"OLDPWD",tmp);
+		else
+		{
+			add_environ(&sc->environ, "OLDPWD", minishell_getenv(sc, "PWD"));
 			getcwd(pwd, PATH_MAX);
-			add_environ(&sc->environ,"PWD",pwd);
+			add_environ(&sc->environ, "PWD", pwd);
 			update_shell_environ(sc);
 		}
 	}
 }
 
-void	builtin_pwd(t_shell *sc, t_prompt *prompt, t_process_io io)
+void	builtin_pwd(__attribute__((unused)) t_shell *sc,
+					__attribute__((unused)) t_prompt *prompt, t_process_io io)
 {
 	char	pwd[PATH_MAX];
 
@@ -77,8 +80,8 @@ void	builtin_pwd(t_shell *sc, t_prompt *prompt, t_process_io io)
 	write(io.sout, "\n", 1);
 }
 
-// TODO: Fix that bullshit with the goddamn export view declare -x and the dumb not showing var in env when ""
-void	builtin_export(t_shell *sc, t_prompt *prompt, t_process_io io)
+void	builtin_export(t_shell *sc, t_prompt *prompt,
+	__attribute__((unused)) t_process_io io)
 {
 	char	*key;
 	char	*value;
@@ -103,7 +106,8 @@ void	builtin_export(t_shell *sc, t_prompt *prompt, t_process_io io)
 	free(value);
 }
 
-void	builtin_unset(t_shell *sc, t_prompt *prompt, t_process_io io)
+void	builtin_unset(t_shell *sc, t_prompt *prompt,
+	__attribute__((unused)) t_process_io io)
 {
 	char	*key;
 

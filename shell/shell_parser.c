@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:29:11 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 17:52:46 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt);
 static void	handle_redirect(char *prompt, t_uint64_t *idx, t_prompt *data,
-							   char *char_stash);
+				char *char_stash);
 
 t_prompt	*parse_prompt(char *prompt, t_shell *sc)
 {
@@ -22,7 +22,7 @@ t_prompt	*parse_prompt(char *prompt, t_shell *sc)
 	t_prompt	*result;
 	char		*char_stash;
 	t_uint32_t	stash_idx;
-	t_uint8_t		quote_mode;
+	t_uint8_t	quote_mode;
 
 	result = (t_prompt *)ft_calloc(1, sizeof(t_prompt));
 	result->argc = 0;
@@ -33,7 +33,8 @@ t_prompt	*parse_prompt(char *prompt, t_shell *sc)
 	quote_mode = 0;
 	while (idx < ft_strlen(prompt))
 	{
-		handle_quote(prompt, &idx, &quote_mode, char_stash, &stash_idx);
+		handle_quote((struct s_handle_quote){prompt, &idx, &quote_mode,
+			char_stash, &stash_idx});
 		if ((!ft_memcmp(&prompt[idx], "<<", 2) || !ft_memcmp(&prompt[idx], ">>",
 					2) || prompt[idx] == '<' || prompt[idx] == '>')
 			&& !quote_mode)
@@ -86,7 +87,7 @@ static void	stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt)
 }
 
 static void	handle_redirect(char *prompt, t_uint64_t *idx, t_prompt *data,
-							   char *char_stash)
+		char *char_stash)
 {
 	t_uint32_t	stash_idx;
 	t_redirect	*new_redirect;

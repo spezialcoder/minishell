@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:40:19 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 20:22:49 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ void	free_t_process(void *addr)
 	t_process	*ps;
 
 	ps = (t_process *)addr;
-	free(ps->cmd);
-	free_split_array(ps->argv);
-	free((void *)ps);
+	if(!ps) return;
+	if(ps->cmd) free(ps->cmd);
+	if(ps->argv) free_split_array(ps->argv);
+	if(ps) free((void *)ps);
 }
 
 void	ft_lstpop(t_list **lst, void (*del)(void *))

@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:40:37 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:39:40 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 20:21:42 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_error	launch_command(t_prompt *prompt, t_shell *sc, t_process_io io)
 	command = (t_process *)ft_calloc(1, sizeof(t_process));
 	error = setup_process(command, prompt, sc, io);
 	if (error != E_OK)
-		return (error);
+		return (free_t_process(command), error);
 	ft_memset(pipefd, 0, sizeof(pipefd));
 	if (prompt->pipe)
 	{
@@ -40,7 +40,7 @@ t_error	launch_command(t_prompt *prompt, t_shell *sc, t_process_io io)
 	}
 	error = resolve_process_io(prompt, &command->io);
 	if (error != E_OK)
-		return (error);
+		return (free_t_process(command), error);
 	ft_lstadd_back(&sc->processes, ft_lstnew((void *)command));
 	builtin_ptr = get_builtin(prompt);
 	if (builtin_ptr && !prompt->pipe)
@@ -83,9 +83,9 @@ static void	cmd_processor(t_process *ps)
 
 static t_error	resolve_process_io(const t_prompt *prompt, t_process_io *io)
 {
-	t_uint8_t		redirect_status;
-	t_redirect		*redirect;
-	t_list			*current;
+	t_uint8_t	redirect_status;
+	t_redirect	*redirect;
+	t_list		*current;
 
 	redirect_status = 0;
 	current = prompt->redirect;

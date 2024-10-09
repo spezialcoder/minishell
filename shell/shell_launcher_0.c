@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:30:39 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/09 16:58:34 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 17:44:50 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,16 @@ static int	delimiter_input(char *delim)
 		return (-1);
 	}
 	input = readline("> ");
-	while (ft_memcmp(input, delim, ft_strlen(input)+1))
+	while (ft_memcmp(input, delim, ft_strlen(input) + 1))
 	{
 		write(pipefd[1], input, ft_strlen(input));
-		write(pipefd[1], "\n\0", 2);
+		write(pipefd[1], "\n", 1);
 		free(input);
 		input = readline("> ");
 		if (!input)
 			return (-1);
 	}
-	if(input) free(input);
+	if (input)
+		free(input);
 	return (close(pipefd[1]), pipefd[0]);
 }

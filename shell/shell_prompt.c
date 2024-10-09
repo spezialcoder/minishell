@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/09 16:48:27 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 20:17:15 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,11 @@ int	show_prompt(t_shell *sc)
 	while (prompt)
 	{
 		altered_prompt = handle_string(prompt, ft_strlen(prompt), sc);
-		if (*prompt)
+		add_history(prompt);
+		if (altered_prompt)
 		{
-			add_history(prompt);
-			if (altered_prompt && *altered_prompt)
-			{
-				handle_prompt(altered_prompt, sc);
-				free(altered_prompt);
-			}
+			handle_prompt(altered_prompt, sc);
+			if(*prompt) free(altered_prompt);
 		}
 		free(prompt);
 		prompt = readline("minishell> ");

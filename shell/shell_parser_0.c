@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 14:59:35 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/08 18:28:15 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 20:09:30 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*handle_string(char *str, t_uint32_t ssize, t_shell *sc)
 {
 	t_uint32_t				idx;
 	t_uint32_t				out_idx;
-	t_uint8_t					quote_mode;
+	t_uint8_t				quote_mode;
 	struct s_string_parser	sp;
 	char					*var_content;
 
@@ -77,33 +77,34 @@ char	*handle_string(char *str, t_uint32_t ssize, t_shell *sc)
 	return (free(sp.env_var), free(sp.arg_buffer), sp.result);
 }
 
-t_uint8_t	handle_quote(const char *prompt, t_uint64_t *idx, t_uint8_t *quote_mode,
-						  char *char_stash, t_uint32_t *stash_idx)
+t_uint8_t	handle_quote(struct s_handle_quote q)
 {
-	if (prompt[*idx] == '\"' && !(*quote_mode & 2))
+	if (q.prompt[*q.idx] == '\"' && !(*q.quote_mode & 2))
 	{
-		if ((*quote_mode & 1) && *stash_idx == 0)
+		if ((*q.quote_mode & 1) && *q.stash_idx == 0)
 		{
-			char_stash[0] = 0;
-			(*stash_idx)++;
+			q.char_stash[0] = 0;
+			(*q.stash_idx)++;
 		}
-		*quote_mode ^= 1;
-		(*idx)++;
-		if (prompt[*idx] == '\"')
-			return ((*idx)++, *quote_mode ^= 1, 1);
+		*q.quote_mode ^= 1;
+		if (q.prompt[++(*q.idx)] == '\"' ||
+		q.prompt[*q.idx] == '\'') {
+			return (handle_quote(q), 1);
+		}
+
 		return (1);
 	}
-	else if (prompt[*idx] == '\'' && !(*quote_mode & 1))
+	else if (q.prompt[*q.idx] == '\'' && !(*q.quote_mode & 1))
 	{
-		if ((*quote_mode & 2) && *stash_idx == 0)
+		if ((*q.quote_mode & 2) && *q.stash_idx == 0)
 		{
-			char_stash[0] = 0;
-			(*stash_idx)++;
+			q.char_stash[0] = 0;
+			(*q.stash_idx)++;
 		}
-		*quote_mode ^= 2;
-		(*idx)++;
-		if (prompt[*idx] == '\'')
-			return ((*idx)++, *quote_mode ^= 2, 1);
+		*q.quote_mode ^= 2;
+		if (q.prompt[++(*q.idx)] == '\'' ||
+			q.prompt[*q.idx] == '\"')
+			return (handle_quote(q), 1);
 		return (1);
 	}
 	return (0);

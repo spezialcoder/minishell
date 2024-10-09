@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:24:13 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/09 16:17:12 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/09 17:40:46 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,15 @@ struct						s_string_parser
 	t_size_t				tmp_var_len;
 };
 
-t_uint8_t					handle_quote(const char *prompt, t_uint64_t *idx,
-								t_uint8_t *quote_mode, char *char_stash,
-								t_uint32_t *stash_idx);
+struct s_handle_quote {
+	const char	*prompt;
+	t_uint64_t	*idx;
+	t_uint8_t	*quote_mode;
+	char		*char_stash;
+	t_uint32_t	*stash_idx;
+};
+
+t_uint8_t					handle_quote(struct s_handle_quote q);
 t_prompt					*parse_prompt(char *prompt, t_shell *sc);
 char						*handle_string(char *str, t_uint32_t ssize,
 								t_shell *sc);
@@ -152,20 +158,23 @@ void						ft_lstpop(t_list **lst, void (*del)(void *));
 void						setup_signal_handlers(void);
 
 // Builtins
-void						builtin_echo(t_shell *sc, t_prompt *prompt,
-								t_process_io io);
+void						builtin_echo(__attribute__((unused)) t_shell *sc,
+								t_prompt *prompt, t_process_io io);
 void						builtin_cd(t_shell *sc, t_prompt *prompt,
-								t_process_io io);
-void						builtin_pwd(t_shell *sc, t_prompt *prompt,
+								__attribute__((unused)) t_process_io io);
+void						builtin_pwd(__attribute__((unused)) t_shell *sc,
+								__attribute__((unused)) t_prompt *prompt,
 								t_process_io io);
 void						builtin_export(t_shell *sc, t_prompt *prompt,
-								t_process_io io);
+								__attribute__((unused)) t_process_io io);
 void						builtin_unset(t_shell *sc, t_prompt *prompt,
-								t_process_io io);
-void						builtin_env(t_shell *sc, t_prompt *prompt,
-								t_process_io io);
-void						builtin_exit(t_shell *sc, t_prompt *prompt,
-								t_process_io io);
+								__attribute__((unused)) t_process_io io);
+void						builtin_env(t_shell *sc,
+								__attribute__((unused)) t_prompt *prompt,
+								__attribute__((unused)) t_process_io io);
+void						builtin_exit(t_shell *sc,
+								__attribute__((unused)) t_prompt *prompt,
+								__attribute__((unused)) t_process_io io);
 
 // Environ
 
@@ -176,4 +185,9 @@ char						*minishell_getenv(t_shell *sc, char *key);
 void						add_environ(t_environment *env, char *key,
 								char *str);
 void						del_environ(t_environment *env, char *key);
-void 						export_print(t_shell *sc) ;
+void						export_print(t_shell *sc);
+
+// Norminette
+void						del_environ_norm(t_environment *env,
+								const char *key, t_size_t idx,
+								t_size_t new_idx);
