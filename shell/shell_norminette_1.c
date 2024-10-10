@@ -83,5 +83,9 @@ static void	cmd_processor(t_process *ps)
 {
 	dup2(ps->io.sout, 1);
 	dup2(ps->io.sin, 0);
-	execve(ps->cmd, ps->argv, ps->envp);
+	if (execve(ps->cmd, ps->argv, ps->envp))
+	{
+		perror("ERROR: not a executable");
+	}
+	exit(0);
 }

@@ -82,7 +82,7 @@ char	*find_binary(char *cmd, t_shell *sc)
 	if (!cmd)
 		return (NULL);
 	path_str = minishell_getenv(sc, "PATH");
-	if (access(cmd, F_OK | X_OK) == 0)
+	if (access(cmd, X_OK) == 0)
 		return (ft_memcpy(ft_calloc(1, ft_strlen(cmd) + 1), cmd,
 				ft_strlen(cmd)));
 	if (!path_str)
@@ -92,7 +92,7 @@ char	*find_binary(char *cmd, t_shell *sc)
 	while (path[path_idx])
 	{
 		binary = concat_path_file(path[path_idx], cmd);
-		if (!access(binary, F_OK | X_OK))
+		if (!access(binary, X_OK))
 			return (free_split_array(path), binary);
 		free(binary);
 		path_idx++;
