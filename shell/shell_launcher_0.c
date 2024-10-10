@@ -6,7 +6,7 @@
 /*   By: lsorg <lsorg@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:30:39 by lsorg             #+#    #+#             */
-/*   Updated: 2024/10/10 19:26:48 by lsorg            ###   ########.fr       */
+/*   Updated: 2024/10/10 19:21:52 by lsorg            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,5 @@ static int	delimiter_input(char *delim)
 	}
 	if (input)
 		free(input);
-	else
-		return (close(pipefd[1]), close(pipefd[0]), -1);
 	return (close(pipefd[1]), pipefd[0]);
 }
