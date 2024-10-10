@@ -189,6 +189,49 @@ void						del_environ(t_environment *env, char *key);
 void						export_print(t_shell *sc);
 
 // Norminette
+
+typedef struct s_parse_prompt_norm
+{
+	char					*prompt;
+	t_shell					*sc;
+	t_uint64_t				*idx;
+	t_prompt				*result;
+	char					*char_stash;
+	t_uint32_t				*stash_idx;
+	t_uint8_t				*quote_mode;
+}							t_parse_prompt_norm;
+
+typedef struct s_handle_string_norm
+{
+	const char				*str;
+	t_uint32_t				ssize;
+	t_shell					*sc;
+	t_uint8_t				quote_mode;
+	char					*var_content;
+	t_uint32_t				*idx;
+	t_uint32_t				*out_idx;
+	struct s_string_parser	*sp;
+}							t_handle_string_norm;
+
+typedef struct s_launch_norm
+{
+	t_process				*command;
+	t_process_io			pipe_io;
+	int						pipefd[2];
+	int						status;
+	t_error					error;
+	t_builtin_ptr			builtin_ptr;
+}							t_launch_norm;
+
 void						del_environ_norm(t_environment *env,
 								const char *key, t_size_t idx,
 								t_size_t new_idx);
+void						handle_redirect_norm(const char *prompt,
+								t_uint64_t *idx, t_redirect *new_redirect);
+void						parse_prompt_norm(t_parse_prompt_norm d);
+void						handle_string_norm(t_handle_string_norm d);
+void						launch_command_norm(t_prompt *prompt, t_shell *sc,
+								t_launch_norm *lc);
+t_uint8_t					resolve_process_io_norm(t_process_io *io,
+								t_uint8_t redirect_status,
+								const t_redirect *redirect);

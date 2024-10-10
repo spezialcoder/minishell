@@ -12,8 +12,8 @@
 
 #include "shell.h"
 
-static void	stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt);
-static void	handle_redirect(char *prompt, t_uint64_t *idx, t_prompt *data,
+void		stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt);
+void		handle_redirect(char *prompt, t_uint64_t *idx, t_prompt *data,
 				char *char_stash);
 
 t_prompt	*parse_prompt(char *prompt, t_shell *sc)
@@ -31,32 +31,8 @@ t_prompt	*parse_prompt(char *prompt, t_shell *sc)
 	idx = 0;
 	stash_idx = 0;
 	quote_mode = 0;
-	while (idx < ft_strlen(prompt))
-	{
-		handle_quote((struct s_handle_quote){prompt, &idx, &quote_mode,
-			char_stash, &stash_idx});
-		if ((!ft_memcmp(&prompt[idx], "<<", 2) || !ft_memcmp(&prompt[idx], ">>",
-					2) || prompt[idx] == '<' || prompt[idx] == '>')
-			&& !quote_mode)
-		{
-			stash_it(&stash_idx, char_stash, result);
-			handle_redirect(prompt, &idx, result, char_stash);
-		}
-		else if (prompt[idx] == ' ' && !quote_mode)
-		{
-			stash_it(&stash_idx, char_stash, result);
-		}
-		else if (prompt[idx] == '|' && !quote_mode)
-		{
-			result->pipe = parse_prompt(prompt + idx + 1, sc);
-			break ;
-		}
-		else
-		{
-			char_stash[stash_idx++] = prompt[idx];
-		}
-		idx++;
-	}
+	parse_prompt_norm((t_parse_prompt_norm){prompt, sc, &idx, result,
+		char_stash, &stash_idx, &quote_mode});
 	stash_it(&stash_idx, char_stash, result);
 	if (quote_mode)
 	{
@@ -66,7 +42,7 @@ t_prompt	*parse_prompt(char *prompt, t_shell *sc)
 	return (free(char_stash), result);
 }
 
-static void	stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt)
+void	stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt)
 {
 	char	*result;
 
@@ -86,29 +62,14 @@ static void	stash_it(t_uint32_t *stash_idx, char *char_stash, t_prompt *prompt)
 	}
 }
 
-static void	handle_redirect(char *prompt, t_uint64_t *idx, t_prompt *data,
+void	handle_redirect(char *prompt, t_uint64_t *idx, t_prompt *data,
 		char *char_stash)
 {
 	t_uint32_t	stash_idx;
 	t_redirect	*new_redirect;
 
 	new_redirect = ft_calloc(1, sizeof(t_redirect));
-	if (!ft_memcmp(&prompt[*idx], "<<", 2))
-	{
-		new_redirect->type = R_DELIMITER;
-		(*idx)++;
-	}
-	else if (!ft_memcmp(&prompt[*idx], ">>", 2))
-	{
-		new_redirect->type = R_FILE_APPEND;
-		(*idx)++;
-	}
-	else if (prompt[*idx] == '<')
-	{
-		new_redirect->type = R_FILE_INPUT;
-	}
-	else
-		new_redirect->type = R_FILE_OUTPUT;
+	handle_redirect_norm(prompt, idx, new_redirect);
 	(*idx)++;
 	while (prompt[*idx] == ' ')
 		(*idx)++;

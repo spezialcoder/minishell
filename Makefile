@@ -17,7 +17,8 @@ SRC =	main.c \
 		$(SHELL_DIR)/shell_parser.c \
 		$(SHELL_DIR)/shell_parser_0.c \
 		$(SHELL_DIR)/shell_prompt.c \
-		$(SHELL_DIR)/shell_norminette_0.c
+		$(SHELL_DIR)/shell_norminette_0.c \
+		$(SHELL_DIR)/shell_norminette_1.c
 
 OBJ = $(SRC:.c=.o)
 

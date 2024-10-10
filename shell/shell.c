@@ -29,7 +29,7 @@ int	minishell_boot(char **envp)
 	return (0);
 }
 
-__attribute__((noreturn)) void minishell_shutdown(t_shell *sc, int code)
+__attribute__((noreturn)) void	minishell_shutdown(t_shell *sc, int code)
 {
 	minishell_cleanup(sc);
 	exit(code);

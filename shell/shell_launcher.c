@@ -14,71 +14,33 @@
 
 static char		*concat_path_file(char *path, char *file);
 static t_error	resolve_process_io(const t_prompt *prompt, t_process_io *io);
-static void		cmd_processor(t_process *ps);
 
 t_error	launch_command(t_prompt *prompt, t_shell *sc, t_process_io io)
 {
-	t_process		*command;
-	t_process_io	pipe_io;
-	int				pipefd[2];
-	int				status;
-	t_error			error;
-	t_builtin_ptr	builtin_ptr;
+	t_launch_norm	lc;
 
-	status = 0;
-	command = (t_process *)ft_calloc(1, sizeof(t_process));
-	error = setup_process(command, prompt, sc, io);
-	if (error != E_OK)
-		return (free_t_process(command), error);
-	ft_memset(pipefd, 0, sizeof(pipefd));
+	lc.status = 0;
+	lc.command = (t_process *)ft_calloc(1, sizeof(t_process));
+	lc.error = setup_process(lc.command, prompt, sc, io);
+	if (lc.error != E_OK)
+		return (free_t_process(lc.command), lc.error);
+	ft_memset(lc.pipefd, 0, sizeof(lc.pipefd));
 	if (prompt->pipe)
 	{
-		pipe(pipefd);
-		command->io.sout = pipefd[1];
-		pipe_io.sin = pipefd[0];
-		pipe_io.sout = 1;
+		pipe(lc.pipefd);
+		lc.command->io.sout = lc.pipefd[1];
+		lc.pipe_io.sin = lc.pipefd[0];
+		lc.pipe_io.sout = 1;
 	}
-	error = resolve_process_io(prompt, &command->io);
-	if (error != E_OK)
-		return (free_t_process(command), error);
-	ft_lstadd_back(&sc->processes, ft_lstnew((void *)command));
-	builtin_ptr = get_builtin(prompt);
-	if (builtin_ptr && !prompt->pipe)
-	{
-		builtin_ptr(sc, prompt, command->io);
-	}
-	else
-	{
-		command->process_id = fork();
-		if (command->process_id == 0)
-		{
-			if (builtin_ptr)
-			{
-				builtin_ptr(sc, prompt, command->io);
-				exit(0);
-			}
-			else
-				cmd_processor(command);
-		}
-	}
-	if (prompt->pipe)
-	{
-		close(pipefd[1]);
-		error = launch_command(prompt->pipe, sc, pipe_io);
-		close(pipefd[0]);
-	}
-	waitpid(command->process_id, &status, 0);
+	lc.error = resolve_process_io(prompt, &lc.command->io);
+	if (lc.error != E_OK)
+		return (free_t_process(lc.command), lc.error);
+	launch_command_norm(prompt, sc, &lc);
+	waitpid(lc.command->process_id, &lc.status, 0);
 	ft_lstpop(&sc->processes, free_t_process);
-	if (!prompt->pipe && WIFEXITED(status))
-		sc->recent_exit_code = WEXITSTATUS(status);
-	return (error);
-}
-
-static void	cmd_processor(t_process *ps)
-{
-	dup2(ps->io.sout, 1);
-	dup2(ps->io.sin, 0);
-	execve(ps->cmd, ps->argv, ps->envp);
+	if (!prompt->pipe && WIFEXITED(lc.status))
+		sc->recent_exit_code = WEXITSTATUS(lc.status);
+	return (lc.error);
 }
 
 static t_error	resolve_process_io(const t_prompt *prompt, t_process_io *io)
@@ -93,13 +55,8 @@ static t_error	resolve_process_io(const t_prompt *prompt, t_process_io *io)
 	{
 		redirect = (t_redirect *)current->content;
 		if (redirect->type == R_FILE_OUTPUT || redirect->type == R_FILE_APPEND)
-		{
-			if (redirect_status & 1)
-				close(io->sout);
-			io->sout = obtain_redirect_descriptor(redirect);
-			if (!(redirect_status & 1))
-				redirect_status |= 1;
-		}
+			redirect_status = resolve_process_io_norm(io, redirect_status,
+					redirect);
 		else
 		{
 			if (redirect_status & 2)
